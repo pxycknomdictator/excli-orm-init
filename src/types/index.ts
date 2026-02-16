@@ -18,7 +18,7 @@ export type Config = {
     language: "ts" | "js";
     packageManager: "npm" | "yarn" | "pnpm" | "bun";
     database: {
-        sql?: SQL_DB_CONFIG[];
-        no_sql?: NO_SQL_DB_CONFIG[];
+        sql?: SQL_DB_CONFIG;
+        no_sql?: NO_SQL_DB_CONFIG;
     };
 };
