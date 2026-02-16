@@ -1,0 +1,58 @@
+{
+    "name": "@excli/orm-init",
+    "version": "1.0.0",
+    "type": "module",
+    "types": "dist/index.d.mts",
+    "main": "dist/index.mjs",
+    "description": "A CLI tool for initializing and configuring SQL and NoSQL ORM setups in Node.js and TypeScript projects.",
+    "scripts": {
+        "build": "tsdown",
+        "format": "prettier --write .",
+        "start": "node dist/index.mjs",
+        "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
+        "prepublishOnly": "npm run build",
+        "prepare": "husky"
+    },
+    "keywords": [
+        "excli",
+        "orm",
+        "orm-init",
+        "orm-setup",
+        "database",
+        "database-setup",
+        "prisma",
+        "sequelize",
+        "typeorm",
+        "nodejs",
+        "drizzle",
+        "typescript",
+        "cli",
+        "code-generator"
+    ],
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "bin": {
+        "excli-orm-init": "./dist/index.mjs"
+    },
+    "author": "Noman <pxycknomdictator@gmail.com>",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pxycknomdictator/excli-orm-init.git"
+    },
+    "bugs": {
+        "url": "https://github.com/pxycknomdictator/excli-orm-init/issues"
+    },
+    "devDependencies": {
+        "@types/node": "^25.0.6",
+        "husky": "^9.1.7",
+        "prettier": "^3.7.4",
+        "tsdown": "^0.19.0",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@clack/prompts": "^0.11.0",
+        "figlet": "^1.9.4"
+    }
+}
