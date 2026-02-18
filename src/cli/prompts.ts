@@ -2,6 +2,20 @@ import { isCancel, select } from "@clack/prompts";
 import { terminate } from "src/utils";
 import type { Config } from "src/types";
 
+export async function promptDatabaseType(): Promise<"sql" | "no_sql"> {
+    const databaseType = await select({
+        message: "Select your Database type:",
+        options: [
+            { label: "SQL", value: "sql" },
+            { label: "NOSQL", value: "no_sql" },
+        ],
+    });
+
+    if (isCancel(databaseType)) terminate("Process cancelled ❌");
+
+    return databaseType as "sql" | "no_sql";
+}
+
 export async function promptLanguage(): Promise<Config["language"]> {
     const language = (await select({
         message: "Select your programming language:",
