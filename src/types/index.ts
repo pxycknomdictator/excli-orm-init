@@ -1,3 +1,5 @@
+export type DATABASE_TYPE = "sql" | "no_sql";
+
 export type SQL_DATABASE = "mysql" | "mariadb" | "postgres";
 export type SQL_ORMS = "prisma" | "drizzle" | "typeorm" | "sequelize";
 
@@ -17,8 +19,5 @@ export type NO_SQL_DB_CONFIG = {
 export type Config = {
     language: "ts" | "js";
     packageManager: "npm" | "yarn" | "pnpm" | "bun";
-    database: {
-        sql?: SQL_DB_CONFIG;
-        no_sql?: NO_SQL_DB_CONFIG;
-    };
+    database: DATABASE_TYPE;
 };
