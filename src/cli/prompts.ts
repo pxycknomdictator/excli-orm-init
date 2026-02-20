@@ -6,9 +6,11 @@ import {
     sql_database,
     sql_orms,
 } from "src/config";
-import type { Config, DATABASE_TYPE } from "src/types";
+import type { DATABASE_TYPE, ProjectConfig } from "src/types";
 
-export async function promptDatabaseType(): Promise<DATABASE_TYPE> {
+export async function promptDatabaseType(): Promise<
+    ProjectConfig["databaseType"]
+> {
     const databaseType = await select({
         message: "Select your Database type:",
         options: [
@@ -19,10 +21,12 @@ export async function promptDatabaseType(): Promise<DATABASE_TYPE> {
 
     if (isCancel(databaseType)) terminate("Process cancelled ❌");
 
-    return databaseType as DATABASE_TYPE;
+    return databaseType as ProjectConfig["databaseType"];
 }
 
-export async function promptDatabase(type: DATABASE_TYPE) {
+export async function promptDatabase(
+    type: DATABASE_TYPE,
+): Promise<ProjectConfig["database"]> {
     const options = type === "sql" ? sql_database : no_sql_database;
 
     const database = await select({
@@ -35,10 +39,12 @@ export async function promptDatabase(type: DATABASE_TYPE) {
 
     if (isCancel(database)) terminate("Process cancelled ❌");
 
-    return database;
+    return database as ProjectConfig["database"];
 }
 
-export async function promptDatabaseOrm(type: DATABASE_TYPE) {
+export async function promptDatabaseOrm(
+    type: DATABASE_TYPE,
+): Promise<ProjectConfig["databaseOrm"]> {
     const options = type === "sql" ? sql_orms : no_sql_orms;
 
     const orm = await select({
@@ -51,25 +57,25 @@ export async function promptDatabaseOrm(type: DATABASE_TYPE) {
 
     if (isCancel(orm)) terminate("Process cancelled ❌");
 
-    return orm;
+    return orm as ProjectConfig["databaseOrm"];
 }
 
-export async function promptLanguage(): Promise<Config["language"]> {
-    const language = (await select({
+export async function promptLanguage(): Promise<ProjectConfig["language"]> {
+    const language = await select({
         message: "Select your programming language:",
         options: [
             { label: "TypeScript", value: "ts" },
             { label: "JavaScript", value: "js" },
         ],
-    })) as Config["language"];
+    });
 
     if (isCancel(language)) terminate("Process cancelled ❌");
 
-    return language;
+    return language as ProjectConfig["language"];
 }
 
-export async function promptPkgManager(): Promise<Config["packageManager"]> {
-    const pkgManager = (await select({
+export async function promptPkgManager(): Promise<ProjectConfig["pkgManager"]> {
+    const pkgManager = await select({
         message: "Select your package manager:",
         options: [
             { label: "npm", value: "npm" },
@@ -77,9 +83,9 @@ export async function promptPkgManager(): Promise<Config["packageManager"]> {
             { label: "pnpm", value: "pnpm" },
             { label: "bun", value: "bun" },
         ],
-    })) as Config["packageManager"];
+    });
 
     if (isCancel(pkgManager)) terminate("Process cancelled ❌");
 
-    return pkgManager;
+    return pkgManager as ProjectConfig["pkgManager"];
 }
