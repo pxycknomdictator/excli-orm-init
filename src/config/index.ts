@@ -1,6 +1,7 @@
 import type {
     NO_SQL_DATABASE,
     NO_SQL_ORMS,
+    ScriptConfig,
     SQL_DATABASE,
     SQL_ORMS,
 } from "src/types";
@@ -17,3 +18,10 @@ export const sql_orms: SQL_ORMS[] = [
     "sequelize",
 ];
 export const no_sql_orms: NO_SQL_ORMS[] = ["prisma", "typeorm", "mongoose"];
+
+export const drizzleScripts: ScriptConfig = {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+};
