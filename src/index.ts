@@ -1,5 +1,11 @@
+import { displayBanner } from "./cli";
+import { getUserInputs } from "./core";
+
 async function main() {
-    console.log("Hello excli/orm-init");
+    displayBanner();
+
+    const config = await getUserInputs();
+    console.log(config);
 }
 
 main().catch((error) => {
