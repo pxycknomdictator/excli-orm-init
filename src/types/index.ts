@@ -21,3 +21,7 @@ export type Config = {
     packageManager: "npm" | "yarn" | "pnpm" | "bun";
     database: DATABASE_TYPE;
 };
+
+export type ScriptConfig = {
+    [key: string]: string;
+};
