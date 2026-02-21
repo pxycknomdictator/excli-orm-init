@@ -31,3 +31,8 @@ export type ProjectConfig = {
     language: Language;
     pkgManager: PACKAGE_MANAGER;
 };
+
+export type GenerateFileArgs = {
+    fileLocation: string;
+    fileContent: string;
+};
