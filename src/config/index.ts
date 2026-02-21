@@ -25,3 +25,9 @@ export const drizzleScripts: ScriptConfig = {
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
 };
+
+export const dialectMap: Record<SQL_DATABASE, string> = {
+    mariadb: "mysql",
+    mysql: "mysql",
+    postgres: "postgresql",
+};
