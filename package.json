@@ -4,7 +4,7 @@
     "type": "module",
     "types": "dist/index.d.mts",
     "main": "dist/index.mjs",
-    "description": "A CLI tool for initializing and configuring SQL and NoSQL ORM setups in Node.js and TypeScript projects.",
+    "description": "A CLI tool for setting up popular SQL and NoSQL ORMs/ODMs in Node.js projects, with support for both JavaScript and TypeScript.",
     "scripts": {
         "build": "tsdown",
         "format": "prettier --write .",
