@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { cancel } from "@clack/prompts";
 import type { GenerateFileArgs, Language } from "src/types";
+import { spawn } from "node:child_process";
 
 export async function generateFile(fileArgs: GenerateFileArgs) {
     const { fileLocation, fileContent } = fileArgs;
@@ -21,6 +22,24 @@ export function concatFileExtension(lang: Language, ...locations: string[]) {
 }
 
 export const isFileExists = (location: string) => existsSync(location);
+
+export function fireShell(command: string, targetDir: string = process.cwd()) {
+    return new Promise((resolve, reject) => {
+        const child = spawn(command, {
+            cwd: targetDir,
+            stdio: "ignore",
+            shell: true,
+        });
+
+        child.on("close", (code) => {
+            if (code !== 0)
+                reject(new Error(`Command failed with code ${code}`));
+            else resolve("");
+        });
+
+        child.on("error", (err) => reject(err));
+    });
+}
 
 export function terminate(message: string): never {
     cancel(message);
