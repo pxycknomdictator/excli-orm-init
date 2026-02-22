@@ -18,6 +18,8 @@ import type {
 
 const rootDir = process.cwd();
 
+const TypescriptDevPackages = ["@types/node", "typescript"];
+
 const tsConfigFile = "tsconfig.json";
 const drizzleConfigFile = "drizzle.config";
 const dbFile = "index";
@@ -35,6 +37,7 @@ export const schemasLocation = join(
     "models",
     schemasFile,
 );
+
 export const packageJsonLocation = join(rootDir, packageJson);
 
 export const BANNER_FONT = "Standard";
@@ -99,7 +102,7 @@ export function getDrizzlePackages(
         db !== "mariadb" ? (db as "mysql" | "postgres") : "mysql";
     const config = base[normalizedDb];
 
-    if (isTs) config.devPackages.push("@types/node");
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (normalizedDb === "postgres" && isTs)
         config.devPackages.push("@types/pg");
 
@@ -122,7 +125,7 @@ export function getSequelizePackages(
         db !== "mariadb" ? (db as "mysql" | "postgres") : "mysql";
     const config = base[normalizedDb];
 
-    if (isTs) config.devPackages.push("@types/node");
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (normalizedDb === "postgres" && isTs)
         config.devPackages.push("@types/pg");
 
@@ -143,7 +146,7 @@ export function getTypeOrmPackages(
         db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
     const config = base[normalizedDb];
 
-    if (isTs) config.devPackages.push("@types/node");
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (normalizedDb === "postgres" && isTs)
         config.devPackages.push("@types/pg");
 
@@ -160,7 +163,7 @@ export function getMongoosePackages(
 
     const config = base[db as "mongodb"];
 
-    if (isTs) config.devPackages.push("@types/node");
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
 
     return config;
 }
@@ -188,7 +191,7 @@ export function getPrismaPackages(
         db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
     const config = base[normalizedDb];
 
-    if (isTs) config.devPackages.push("@types/node");
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (normalizedDb === "postgres" && isTs)
         config.devPackages.push("@types/pg");
 

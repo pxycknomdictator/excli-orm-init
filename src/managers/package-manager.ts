@@ -7,6 +7,7 @@ export async function modifyPackageJson(config: ProjectConfig) {
         await readFile(packageJsonLocation, { encoding: "utf-8" }),
     );
 
+    pkg.main = `src/main.${config.language}`;
     pkg.type = "module";
     pkg.scripts = {
         ...(config.databaseOrm === "drizzle" ? drizzleScripts : {}),

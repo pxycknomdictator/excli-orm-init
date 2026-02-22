@@ -4,7 +4,7 @@ export const tsConfig = {
         outDir: "./dist",
         moduleResolution: "bundler",
         target: "esnext",
-        types: [],
+        types: ["node"],
         sourceMap: true,
         declaration: true,
         declarationMap: true,
