@@ -5,9 +5,11 @@ import {
     promptLanguage,
     promptPkgManager,
 } from "src/cli";
-import type { ProjectConfig } from "src/types";
-import { initializeNodeProject, installPackagesWithManager } from "./installer";
 import { ormsList } from "src/config";
+import { fireShell } from "src/utils";
+import { modifyPackageJson } from "src/managers";
+import { initializeNodeProject, installPackagesWithManager } from "./installer";
+import type { ProjectConfig } from "src/types";
 
 export async function getUserInputs(): Promise<ProjectConfig> {
     const databaseType = await promptDatabaseType();
@@ -22,7 +24,12 @@ export async function getUserInputs(): Promise<ProjectConfig> {
 export async function prepareProject(config: ProjectConfig, targetDir: string) {
     const setupOrm = ormsList[config.databaseOrm];
 
-    await setupOrm(config);
-    await initializeNodeProject(targetDir);
-    await installPackagesWithManager(config, targetDir);
+    await Promise.all([
+        setupOrm(config),
+        initializeNodeProject(targetDir),
+        installPackagesWithManager(config, targetDir),
+    ]);
+
+    await modifyPackageJson(config);
+    await fireShell("npx prettier --write . --tab-width 4", targetDir);
 }

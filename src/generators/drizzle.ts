@@ -12,7 +12,9 @@ import type {
     SQL_DATABASE,
 } from "src/types";
 
-export async function setupDrizzle({ language, database }: ProjectConfig) {
+export async function setupDrizzle(config: ProjectConfig) {
+    const { language, database } = config;
+
     const [drizzlePath, dbPath, schemasPath] = concatFileExtension(
         language,
         drizzleConfigLocation,
@@ -28,7 +30,10 @@ export async function setupDrizzle({ language, database }: ProjectConfig) {
     const drizzle: GenerateFileArgs[] = [
         {
             fileLocation: drizzlePath!,
-            fileContent: drizzleConfigContent(database as SQL_DATABASE),
+            fileContent: drizzleConfigContent(
+                database as SQL_DATABASE,
+                language,
+            ),
         },
         {
             fileLocation: dbPath!,
@@ -42,7 +47,7 @@ export async function setupDrizzle({ language, database }: ProjectConfig) {
     );
 }
 
-function drizzleConfigContent(db: SQL_DATABASE) {
+function drizzleConfigContent(db: SQL_DATABASE, lang: Language) {
     const dialect = db !== "mariadb" ? dialectMap[db] : "mysql";
 
     return `import { defineConfig } from "drizzle-kit";
@@ -52,7 +57,7 @@ export default defineConfig({
     schema: "./src/db/models/schemas.ts",
     dialect: "${dialect}",
     dbCredentials: {
-        url: process.env.DATABASE_URL!,
+        url: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
     },
 });
 `;
