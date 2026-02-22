@@ -54,7 +54,7 @@ function drizzleConfigContent(db: SQL_DATABASE, lang: Language) {
 
 export default defineConfig({
     out: "./drizzle",
-    schema: "./src/db/models/schemas.ts",
+    schema: "./src/db/models/schemas.${lang}",
     dialect: "${dialect}",
     dbCredentials: {
         url: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
