@@ -10,6 +10,7 @@ import type {
     NO_SQL_DATABASE,
     NO_SQL_ORMS,
     PackageConfig,
+    ProjectConfig,
     ScriptConfig,
     SQL_DATABASE,
     SQL_ORMS,
@@ -68,11 +69,19 @@ export const installCmdMap: Record<string, string> = {
     bun: "add",
 };
 
-export function getDrizzlePackages(db: SQL_DATABASE, isTs: boolean) {
-    const base: Record<
-        Extract<SQL_DATABASE, "mysql" | "postgres">,
-        PackageConfig
-    > = {
+export const ormsList = {
+    drizzle: setupDrizzle,
+    mongoose: setupMongoose,
+    prisma: setupPrisma,
+    sequelize: setupSequelize,
+    typeorm: setupTypeOrm,
+};
+
+export function getDrizzlePackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<"mysql" | "postgres", PackageConfig> = {
         mysql: {
             packages: ["drizzle-orm", "mysql2"],
             devPackages: ["drizzle-kit"],
@@ -83,61 +92,114 @@ export function getDrizzlePackages(db: SQL_DATABASE, isTs: boolean) {
         },
     };
 
-    const config = db !== "mariadb" ? base[db] : base["mysql"];
+    const normalizedDb =
+        db !== "mariadb" ? (db as "mysql" | "postgres") : "mysql";
+    const config = base[normalizedDb];
+
     if (isTs) config.devPackages.push("@types/node");
-    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+    if (normalizedDb === "postgres" && isTs)
+        config.devPackages.push("@types/pg");
 
     return config;
 }
 
-export function getSequelizePackages(db: SQL_DATABASE, isTs: boolean) {
-    const base: Record<
-        Extract<SQL_DATABASE, "mysql" | "postgres">,
-        PackageConfig
-    > = {
-        mysql: {
-            packages: ["sequelize", "mysql2"],
-            devPackages: [],
-        },
+export function getSequelizePackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<"mysql" | "postgres", PackageConfig> = {
+        mysql: { packages: ["sequelize", "mysql2"], devPackages: [] },
         postgres: {
             packages: ["sequelize", "pg", "pg-hstore"],
             devPackages: [],
         },
     };
 
-    const config = db !== "mariadb" ? base[db] : base["mysql"];
+    const normalizedDb =
+        db !== "mariadb" ? (db as "mysql" | "postgres") : "mysql";
+    const config = base[normalizedDb];
+
     if (isTs) config.devPackages.push("@types/node");
-    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+    if (normalizedDb === "postgres" && isTs)
+        config.devPackages.push("@types/pg");
 
     return config;
 }
 
-export function getTypeOrmPackages(db: SQL_DATABASE, isTs: boolean) {
-    const base: Record<
-        Extract<SQL_DATABASE, "mysql" | "postgres">,
-        PackageConfig
-    > = {
+export function getTypeOrmPackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<"mysql" | "postgres" | "mongodb", PackageConfig> = {
+        mysql: { packages: ["typeorm", "mysql2"], devPackages: [] },
+        postgres: { packages: ["typeorm", "pg"], devPackages: [] },
+        mongodb: { packages: ["typeorm", "mongodb"], devPackages: [] },
+    };
+
+    const normalizedDb =
+        db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
+    const config = base[normalizedDb];
+
+    if (isTs) config.devPackages.push("@types/node");
+    if (normalizedDb === "postgres" && isTs)
+        config.devPackages.push("@types/pg");
+
+    return config;
+}
+
+export function getMongoosePackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<"mongodb", PackageConfig> = {
+        mongodb: { packages: ["mongoose"], devPackages: [] },
+    };
+
+    const config = base[db as "mongodb"];
+
+    if (isTs) config.devPackages.push("@types/node");
+
+    return config;
+}
+
+export function getPrismaPackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<"mysql" | "postgres" | "mongodb", PackageConfig> = {
         mysql: {
-            packages: ["typeorm", "mysql2"],
-            devPackages: [],
+            packages: ["@prisma/client", "@prisma/adapter-mariadb"],
+            devPackages: ["prisma"],
         },
         postgres: {
-            packages: ["typeorm", "pg"],
-            devPackages: [],
+            packages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
+            devPackages: ["prisma"],
+        },
+        mongodb: {
+            packages: ["@prisma/client@6.19"],
+            devPackages: ["prisma@6.19"],
         },
     };
 
-    const config = db !== "mariadb" ? base[db] : base["mysql"];
+    const normalizedDb =
+        db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
+    const config = base[normalizedDb];
+
     if (isTs) config.devPackages.push("@types/node");
-    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+    if (normalizedDb === "postgres" && isTs)
+        config.devPackages.push("@types/pg");
 
     return config;
 }
 
-export const ormsList = {
-    drizzle: setupDrizzle,
-    mongoose: setupMongoose,
-    prisma: setupPrisma,
-    sequelize: setupSequelize,
-    typeorm: setupTypeOrm,
+type ORMs = "drizzle" | "prisma" | "typeorm" | "sequelize" | "mongoose";
+
+type ORMFn = (db: ProjectConfig["database"], isTs: boolean) => PackageConfig;
+
+export const ormsPackagesList: Record<ORMs, ORMFn> = {
+    drizzle: getDrizzlePackages,
+    prisma: getPrismaPackages,
+    typeorm: getTypeOrmPackages,
+    sequelize: getSequelizePackages,
+    mongoose: getMongoosePackages,
 };

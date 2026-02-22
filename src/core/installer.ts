@@ -1,9 +1,9 @@
 import {
-    getDrizzlePackages,
     installCmdMap,
+    ormsPackagesList,
     packageJsonLocation,
 } from "src/config";
-import type { ProjectConfig, SQL_DATABASE } from "src/types";
+import type { ProjectConfig } from "src/types";
 import { fireShell, isFileExists } from "src/utils";
 
 export async function initializeNodeProject(targetDir: string) {
@@ -15,15 +15,13 @@ export async function installPackagesWithManager(
     config: ProjectConfig,
     targetDir: string,
 ) {
-    const { language, pkgManager, database } = config;
+    const { language, pkgManager, databaseOrm, database } = config;
 
     const isTs = language === "ts";
     const installCmd = installCmdMap[pkgManager] ?? null;
 
-    const { packages, devPackages } = getDrizzlePackages(
-        database as SQL_DATABASE,
-        isTs,
-    );
+    const orm = ormsPackagesList[databaseOrm];
+    const { packages, devPackages } = orm(database, isTs);
 
     await fireShell(
         `${pkgManager} ${installCmd} ${packages.join(" ")}`,
