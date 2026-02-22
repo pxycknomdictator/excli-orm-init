@@ -57,3 +57,25 @@ export const installCmdMap: Record<string, string> = {
     yarn: "add",
     bun: "add",
 };
+
+export function getDrizzlePackages(db: SQL_DATABASE, isTs: boolean) {
+    const base = {
+        mysql: {
+            packages: ["drizzle-orm", "mysql2"],
+            devPackages: ["drizzle-kit"],
+        },
+        mariadb: {
+            packages: ["drizzle-orm", "mysql2"],
+            devPackages: ["drizzle-kit"],
+        },
+        postgres: {
+            packages: ["drizzle-orm", "pg"],
+            devPackages: ["drizzle-kit"],
+        },
+    };
+
+    const config = base[db];
+    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+
+    return config;
+}
