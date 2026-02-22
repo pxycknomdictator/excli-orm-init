@@ -1,9 +1,9 @@
 import { dirname } from "node:path";
 import { existsSync } from "node:fs";
+import { spawn } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { cancel } from "@clack/prompts";
 import type { GenerateFileArgs, Language } from "src/types";
-import { spawn } from "node:child_process";
 
 export async function generateFile(fileArgs: GenerateFileArgs) {
     const { fileLocation, fileContent } = fileArgs;

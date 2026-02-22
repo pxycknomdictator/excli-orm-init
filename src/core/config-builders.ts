@@ -6,6 +6,7 @@ import {
     promptPkgManager,
 } from "src/cli";
 import type { ProjectConfig } from "src/types";
+import { initializeNodeProject, installPackagesWithManager } from "./installer";
 
 export async function getUserInputs(): Promise<ProjectConfig> {
     const databaseType = await promptDatabaseType();
@@ -15,4 +16,9 @@ export async function getUserInputs(): Promise<ProjectConfig> {
     const pkgManager = await promptPkgManager();
 
     return { databaseType, database, databaseOrm, language, pkgManager };
+}
+
+export async function prepareProject(config: ProjectConfig, targetDir: string) {
+    await initializeNodeProject(targetDir);
+    await installPackagesWithManager(config, targetDir);
 }
