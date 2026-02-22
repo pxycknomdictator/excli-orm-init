@@ -1,4 +1,5 @@
 import { dirname } from "node:path";
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { cancel } from "@clack/prompts";
 import type { GenerateFileArgs, Language } from "src/types";
@@ -18,6 +19,8 @@ export async function generateFile(fileArgs: GenerateFileArgs) {
 export function concatFileExtension(lang: Language, ...locations: string[]) {
     return locations.map((loc) => loc.concat(lang === "ts" ? ".ts" : ".js"));
 }
+
+export const isFileExists = (location: string) => existsSync(location);
 
 export function terminate(message: string): never {
     cancel(message);

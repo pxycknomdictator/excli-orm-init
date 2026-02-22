@@ -12,6 +12,7 @@ const rootDir = process.cwd();
 const drizzleConfigFile = "drizzle.config";
 const dbFile = "index";
 const schemasFile = "schemas";
+const packageJson = "package.json";
 
 export const drizzleConfigLocation = join(rootDir, drizzleConfigFile);
 export const dbLocation = join(rootDir, "src", "db", dbFile);
@@ -22,6 +23,7 @@ export const schemasLocation = join(
     "models",
     schemasFile,
 );
+export const packageJsonLocation = join(rootDir, packageJson);
 
 export const BANNER_FONT = "Standard";
 
@@ -47,4 +49,11 @@ export const dialectMap: Record<SQL_DATABASE, string> = {
     mariadb: "mysql",
     mysql: "mysql",
     postgres: "postgresql",
+};
+
+export const installCmdMap: Record<string, string> = {
+    npm: "install",
+    pnpm: "add",
+    yarn: "add",
+    bun: "add",
 };
