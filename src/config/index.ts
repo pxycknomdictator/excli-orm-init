@@ -18,10 +18,13 @@ import type {
 
 const rootDir = process.cwd();
 
+const tsConfigFile = "tsconfig.json";
 const drizzleConfigFile = "drizzle.config";
 const dbFile = "index";
 const schemasFile = "schemas";
 const packageJson = "package.json";
+
+export const tsConfigFileLocation = join(rootDir, tsConfigFile);
 
 export const drizzleConfigLocation = join(rootDir, drizzleConfigFile);
 export const dbLocation = join(rootDir, "src", "db", dbFile);

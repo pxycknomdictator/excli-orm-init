@@ -1,0 +1,19 @@
+export const tsConfig = {
+    compilerOptions: {
+        rootDir: "./src",
+        outDir: "./dist",
+        moduleResolution: "bundler",
+        target: "esnext",
+        types: [],
+        sourceMap: true,
+        declaration: true,
+        declarationMap: true,
+        strict: true,
+        skipLibCheck: true,
+        experimentalDecorators: true,
+        emitDecoratorMetadata: true,
+        strictPropertyInitialization: false,
+    },
+    include: ["src/**/*"],
+    exclude: ["node_modules", "dist"],
+};
