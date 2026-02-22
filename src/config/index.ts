@@ -1,7 +1,15 @@
 import { join } from "node:path";
+import {
+    setupDrizzle,
+    setupMongoose,
+    setupSequelize,
+    setupTypeOrm,
+    setupPrisma,
+} from "src/generators";
 import type {
     NO_SQL_DATABASE,
     NO_SQL_ORMS,
+    PackageConfig,
     ScriptConfig,
     SQL_DATABASE,
     SQL_ORMS,
@@ -45,8 +53,10 @@ export const drizzleScripts: ScriptConfig = {
     "db:studio": "drizzle-kit studio",
 };
 
-export const dialectMap: Record<SQL_DATABASE, string> = {
-    mariadb: "mysql",
+export const dialectMap: Record<
+    Extract<SQL_DATABASE, "mysql" | "postgres">,
+    string
+> = {
     mysql: "mysql",
     postgres: "postgresql",
 };
@@ -59,12 +69,11 @@ export const installCmdMap: Record<string, string> = {
 };
 
 export function getDrizzlePackages(db: SQL_DATABASE, isTs: boolean) {
-    const base = {
+    const base: Record<
+        Extract<SQL_DATABASE, "mysql" | "postgres">,
+        PackageConfig
+    > = {
         mysql: {
-            packages: ["drizzle-orm", "mysql2"],
-            devPackages: ["drizzle-kit"],
-        },
-        mariadb: {
             packages: ["drizzle-orm", "mysql2"],
             devPackages: ["drizzle-kit"],
         },
@@ -74,8 +83,61 @@ export function getDrizzlePackages(db: SQL_DATABASE, isTs: boolean) {
         },
     };
 
-    const config = base[db];
+    const config = db !== "mariadb" ? base[db] : base["mysql"];
+    if (isTs) config.devPackages.push("@types/node");
     if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
 
     return config;
 }
+
+export function getSequelizePackages(db: SQL_DATABASE, isTs: boolean) {
+    const base: Record<
+        Extract<SQL_DATABASE, "mysql" | "postgres">,
+        PackageConfig
+    > = {
+        mysql: {
+            packages: ["sequelize", "mysql2"],
+            devPackages: [],
+        },
+        postgres: {
+            packages: ["sequelize", "pg", "pg-hstore"],
+            devPackages: [],
+        },
+    };
+
+    const config = db !== "mariadb" ? base[db] : base["mysql"];
+    if (isTs) config.devPackages.push("@types/node");
+    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+
+    return config;
+}
+
+export function getTypeOrmPackages(db: SQL_DATABASE, isTs: boolean) {
+    const base: Record<
+        Extract<SQL_DATABASE, "mysql" | "postgres">,
+        PackageConfig
+    > = {
+        mysql: {
+            packages: ["typeorm", "mysql2"],
+            devPackages: [],
+        },
+        postgres: {
+            packages: ["typeorm", "pg"],
+            devPackages: [],
+        },
+    };
+
+    const config = db !== "mariadb" ? base[db] : base["mysql"];
+    if (isTs) config.devPackages.push("@types/node");
+    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+
+    return config;
+}
+
+export const ormsList = {
+    drizzle: setupDrizzle,
+    mongoose: setupMongoose,
+    prisma: setupPrisma,
+    sequelize: setupSequelize,
+    typeorm: setupTypeOrm,
+};

@@ -30,7 +30,7 @@ export async function setupDrizzle({ language, database }: ProjectConfig) {
 }
 
 function drizzleConfigContent(db: SQL_DATABASE) {
-    const dialect = dialectMap[db];
+    const dialect = db !== "mariadb" ? dialectMap[db] : "mysql";
 
     return `import { defineConfig } from "drizzle-kit";
 

@@ -36,3 +36,8 @@ export type GenerateFileArgs = {
     fileLocation: string;
     fileContent: string;
 };
+
+export type PackageConfig = {
+    packages: string[];
+    devPackages: string[];
+};
