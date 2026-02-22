@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import type {
     NO_SQL_DATABASE,
     NO_SQL_ORMS,
@@ -5,6 +6,22 @@ import type {
     SQL_DATABASE,
     SQL_ORMS,
 } from "src/types";
+
+const rootDir = process.cwd();
+
+const drizzleConfigFile = "drizzle.config";
+const dbFile = "index";
+const schemasFile = "schemas";
+
+export const drizzleConfigLocation = join(rootDir, drizzleConfigFile);
+export const dbLocation = join(rootDir, "src", "db", dbFile);
+export const schemasLocation = join(
+    rootDir,
+    "src",
+    "db",
+    "models",
+    schemasFile,
+);
 
 export const BANNER_FONT = "Standard";
 
