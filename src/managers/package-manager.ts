@@ -10,6 +10,7 @@ export async function modifyPackageJson(config: ProjectConfig) {
     pkg.main = `src/main.${config.language}`;
     pkg.type = "module";
     pkg.scripts = {
+        ...pkg.scripts,
         ...(config.databaseOrm === "drizzle" ? drizzleScripts : {}),
     };
 
