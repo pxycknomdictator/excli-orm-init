@@ -104,7 +104,6 @@ export class User {
 
 function typeOrmConnection(db: ProjectConfig["database"], lang: Language) {
     return `import "reflect-metadata";
-
 import { DataSource } from "typeorm";
 import { User } from "./models/schemas.js";
 
@@ -114,5 +113,14 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     entities: [User],
 });
+
+export async function database() {
+    try {
+        await AppDataSource.initialize();
+        console.log("Database is connected!");
+    } catch (error) {
+        throw new Error("failed to connect with database: ", { cause: error });
+    }
+}
 `;
 }
