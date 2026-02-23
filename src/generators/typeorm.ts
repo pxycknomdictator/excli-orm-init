@@ -3,13 +3,16 @@ import type { GenerateFileArgs, Language, ProjectConfig } from "src/types";
 import { concatFileExtension, generateFile } from "src/utils";
 
 export async function setupTypeOrm(config: ProjectConfig) {
-    const { language, database } = config;
+    const { language, database, databaseType } = config;
 
     const [dbPath, schemasPath] = concatFileExtension(
         language,
         dbLocation,
         schemasLocation,
     );
+
+    const typeOrmSchema =
+        databaseType === "sql" ? typeOrmSqlSchema : typeOrmNoSqlSchema;
 
     const typeorm: GenerateFileArgs[] = [
         { fileLocation: schemasPath!, fileContent: typeOrmSchema() },
@@ -24,7 +27,7 @@ export async function setupTypeOrm(config: ProjectConfig) {
     );
 }
 
-function typeOrmSchema() {
+function typeOrmSqlSchema() {
     return `import {
     Entity,
     Column,
@@ -56,6 +59,44 @@ export class User {
     createdAt: Date;
 
     @UpdateDateColumn({ name: "updated_at" })
+    updatedAt: Date;
+}
+`;
+}
+
+function typeOrmNoSqlSchema() {
+    return `import {
+    Entity,
+    Column,
+    ObjectIdColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    Index,
+    ObjectId,
+} from "typeorm";
+
+@Entity({ name: "users" })
+export class User {
+    @ObjectIdColumn()
+    _id: ObjectId;
+
+    @Column()
+    name: string;
+
+    @Column()
+    age: number;
+
+    @Index({ unique: true })
+    @Column()
+    email: string;
+
+    @Column({ default: true })
+    isActive: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
     updatedAt: Date;
 }
 `;
