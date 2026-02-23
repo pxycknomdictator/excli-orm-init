@@ -103,7 +103,9 @@ export class User {
 }
 
 function typeOrmConnection(db: ProjectConfig["database"], lang: Language) {
-    return `import { DataSource } from "typeorm";
+    return `import "reflect-metadata";
+
+import { DataSource } from "typeorm";
 import { User } from "./models/schemas.js";
 
 export const AppDataSource = new DataSource({
