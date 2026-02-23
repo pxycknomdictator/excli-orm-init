@@ -113,21 +113,19 @@ export function getSequelizePackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<"mysql" | "postgres", PackageConfig> = {
+    const base: Record<SQL_DATABASE, PackageConfig> = {
         mysql: { packages: ["sequelize", "mysql2"], devPackages: [] },
+        mariadb: { packages: ["sequelize", "mariadb"], devPackages: [] },
         postgres: {
             packages: ["sequelize", "pg", "pg-hstore"],
             devPackages: [],
         },
     };
 
-    const normalizedDb =
-        db !== "mariadb" ? (db as "mysql" | "postgres") : "mysql";
-    const config = base[normalizedDb];
+    const config = base[db as SQL_DATABASE];
 
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
-    if (normalizedDb === "postgres" && isTs)
-        config.devPackages.push("@types/pg");
+    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
 
     return config;
 }
@@ -137,9 +135,18 @@ export function getTypeOrmPackages(
     isTs: boolean,
 ): PackageConfig {
     const base: Record<"mysql" | "postgres" | "mongodb", PackageConfig> = {
-        mysql: { packages: ["typeorm", "mysql2"], devPackages: [] },
-        postgres: { packages: ["typeorm", "pg"], devPackages: [] },
-        mongodb: { packages: ["typeorm", "mongodb"], devPackages: [] },
+        mysql: {
+            packages: ["typeorm", "mysql2", "reflect-metadata"],
+            devPackages: [],
+        },
+        postgres: {
+            packages: ["typeorm", "pg", "reflect-metadata"],
+            devPackages: [],
+        },
+        mongodb: {
+            packages: ["typeorm", "mongodb", "reflect-metadata"],
+            devPackages: [],
+        },
     };
 
     const normalizedDb =
@@ -147,8 +154,9 @@ export function getTypeOrmPackages(
     const config = base[normalizedDb];
 
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
-    if (normalizedDb === "postgres" && isTs)
+    if (normalizedDb === "postgres" && isTs) {
         config.devPackages.push("@types/pg");
+    }
 
     return config;
 }
