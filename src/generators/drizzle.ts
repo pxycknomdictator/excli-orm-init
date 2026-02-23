@@ -100,7 +100,7 @@ export const usersTable = mysqlTable("users", {
     id: int("id").primaryKey().autoincrement(),
     name: varchar("name", { length: 255 }).notNull(),
     age: int("age").notNull(),
-    email: varchar("email", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
     isActive: boolean("isActive").default(true),
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
     updatedAt: timestamp("updated_at", { mode: "date" })
