@@ -68,6 +68,13 @@ export const dialectMap: Record<
     postgres: "postgresql",
 };
 
+export const typeOrmDbTypeMap: Record<ProjectConfig["database"], string> = {
+    mysql: "mysql",
+    mariadb: "mariadb",
+    postgres: "postgres",
+    mongodb: "mongodb",
+};
+
 export const installCmdMap: Record<string, string> = {
     npm: "install",
     pnpm: "add",
