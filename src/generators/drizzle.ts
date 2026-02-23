@@ -1,6 +1,6 @@
 import {
     dbLocation,
-    dialectMap,
+    drizzleDialectMap,
     drizzleConfigLocation,
     schemasLocation,
 } from "src/config";
@@ -48,7 +48,7 @@ export async function setupDrizzle(config: ProjectConfig) {
 }
 
 function drizzleConfigContent(db: SQL_DATABASE, lang: Language) {
-    const dialect = db !== "mariadb" ? dialectMap[db] : "mysql";
+    const dialect = db !== "mariadb" ? drizzleDialectMap[db] : "mysql";
 
     return `import { defineConfig } from "drizzle-kit";
 

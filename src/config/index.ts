@@ -60,7 +60,7 @@ export const drizzleScripts: ScriptConfig = {
     "db:studio": "drizzle-kit studio",
 };
 
-export const dialectMap: Record<
+export const drizzleDialectMap: Record<
     Extract<SQL_DATABASE, "mysql" | "postgres">,
     string
 > = {
