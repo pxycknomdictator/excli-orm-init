@@ -2,8 +2,10 @@ export const tsConfig = {
     compilerOptions: {
         rootDir: "./src",
         outDir: "./dist",
-        moduleResolution: "bundler",
+        module: "nodenext",
+        moduleResolution: "nodenext",
         target: "esnext",
+        esModuleInterop: true,
         types: ["node"],
         sourceMap: true,
         declaration: true,
