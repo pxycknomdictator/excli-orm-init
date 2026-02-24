@@ -1,7 +1,7 @@
 import { dirname } from "node:path";
 import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import { cancel } from "@clack/prompts";
 import type { GenerateFileArgs, Language } from "src/types";
 
@@ -13,6 +13,17 @@ export async function generateFile(fileArgs: GenerateFileArgs) {
         await writeFile(fileLocation, fileContent, "utf-8");
     } catch (error) {
         console.error("Failed to generate file:", fileLocation);
+        throw error;
+    }
+}
+
+export async function appendExistsFile(fileArgs: GenerateFileArgs) {
+    const { fileLocation, fileContent } = fileArgs;
+
+    try {
+        await appendFile(fileLocation, `\n${fileContent}`, "utf-8");
+    } catch (error) {
+        console.error("Failed to append file:", fileLocation);
         throw error;
     }
 }
