@@ -217,6 +217,7 @@ export function getPrismaPackages(
         db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
     const config = base[normalizedDb];
 
+    config.packages.push("dotenv");
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (normalizedDb === "postgres" && isTs)
         config.devPackages.push("@types/pg");
