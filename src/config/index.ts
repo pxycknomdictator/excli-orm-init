@@ -60,6 +60,17 @@ export const drizzleScripts: ScriptConfig = {
     "db:studio": "drizzle-kit studio",
 };
 
+export const prismaScripts: ScriptConfig = {
+    "db:generate": "prisma generate",
+    "db:dev": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset",
+    "db:push": "prisma db push",
+    "db:status": "prisma migrate status",
+    "db:studio": "prisma studio",
+    "db:format": "prisma format",
+};
+
 export const drizzleDialectMap: Record<
     Extract<SQL_DATABASE, "mysql" | "postgres">,
     string
