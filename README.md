@@ -324,7 +324,7 @@ This package is part of the **excli** ecosystem:
 
 #### 🚀 Complete App — Recommended Workflow
 
-For a full project setup from scratch, use all three packages together:
+For a full project setup from scratch, use this package to get the job done! 
 
 ```bash
 npx @excli/express
