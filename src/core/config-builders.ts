@@ -25,13 +25,10 @@ export async function getUserInputs(): Promise<ProjectConfig> {
 export async function prepareProject(config: ProjectConfig, targetDir: string) {
     const setupOrm = ormsList[config.databaseOrm];
 
-    await Promise.all([
-        setupOrm(config),
-        initializeNodeProject(targetDir),
-        installPackagesWithManager(config, targetDir),
-    ]);
-
+    await initializeNodeProject(targetDir);
     await modifyPackageJson(config);
+    await installPackagesWithManager(config, targetDir);
+    await setupOrm(config);
 
     const isExist = isFileExists(tsConfigFileLocation);
 
