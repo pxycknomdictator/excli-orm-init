@@ -86,6 +86,15 @@ export const typeOrmDbTypeMap: Record<ProjectConfig["database"], string> = {
     mongodb: "mongodb",
 };
 
+export const prismaDialectMap: Record<
+    Extract<ProjectConfig["database"], "mysql" | "postgres" | "mongodb">,
+    string
+> = {
+    mysql: "mysql",
+    postgres: "postgresql",
+    mongodb: "mongodb",
+};
+
 export const installCmdMap: Record<string, string> = {
     npm: "install",
     pnpm: "add",
