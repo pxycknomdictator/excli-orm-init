@@ -32,7 +32,7 @@ export function prismaSqlSchema() {
 
 export function prismaNoSqlSchema() {
     return `model User {
-  id        String   @id @map("_id") @default(auto())
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   age       Int
   email     String   @unique
@@ -48,7 +48,7 @@ export function prismaNoSqlSchema() {
 export async function initializePrisma(db: ProjectConfig["database"]) {
     try {
         const database = db !== "mariadb" ? prismaDialectMap[db] : "mysql";
-        const prismaCli = `npx prisma init --datasource-provider ${database} --output ../generated/prisma`;
+        const prismaCli = `npx prisma init --datasource-provider ${database} --output ../src/generated/prisma`;
         await fireShell(prismaCli);
     } catch (error) {
         throw new Error("failed to generate prisma config");
