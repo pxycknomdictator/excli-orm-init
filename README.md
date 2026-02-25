@@ -330,7 +330,7 @@ For a full project setup from scratch, use this package to get the job done!
 npx @excli/express
 ```
 
-This gives you a fully structured Express app with Docker, a running database, and a configured ORM — all in three commands.
+This gives you a fully structured Express app with Docker, a running database, and a configured ORM — all in one command.
 
 #### 🔧 Adding to an Existing Project
 
