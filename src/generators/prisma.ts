@@ -1,3 +1,5 @@
+import { prismaDialectMap } from "src/config";
+import { fireShell } from "src/utils";
 import type { ProjectConfig } from "src/types";
 
 export async function setupPrisma(_config: ProjectConfig) {}
@@ -30,4 +32,14 @@ export function prismaNoSqlSchema() {
   @@map("users")
 }
 `;
+}
+
+export async function initializePrisma(db: ProjectConfig["database"]) {
+    try {
+        const database = db !== "mariadb" ? prismaDialectMap[db] : "mysql";
+        const prismaCli = `npx prisma init --datasource-provider ${database} --output ../generated/prisma`;
+        await fireShell(prismaCli);
+    } catch (error) {
+        throw new Error("failed to generate prisma config");
+    }
 }
