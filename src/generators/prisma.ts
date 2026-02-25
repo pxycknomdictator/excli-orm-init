@@ -1,8 +1,19 @@
-import { prismaDialectMap } from "src/config";
-import { fireShell } from "src/utils";
+import { prismaDialectMap, prismaSchemaLocation } from "src/config";
+import { appendExistsFile, fireShell } from "src/utils";
 import type { ProjectConfig } from "src/types";
 
-export async function setupPrisma(_config: ProjectConfig) {}
+export async function setupPrisma(config: ProjectConfig) {
+    const { databaseType } = config;
+
+    const prismaSchema =
+        databaseType === "sql" ? prismaSqlSchema : prismaNoSqlSchema;
+
+    await initializePrisma(config.database);
+    await appendExistsFile({
+        fileLocation: prismaSchemaLocation,
+        fileContent: prismaSchema(),
+    });
+}
 
 export function prismaSqlSchema() {
     return `model User {

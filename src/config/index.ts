@@ -25,10 +25,12 @@ const drizzleConfigFile = "drizzle.config";
 const dbFile = "index";
 const schemasFile = "schemas";
 const packageJson = "package.json";
+const prismaSchemaFile = "schema.prisma";
 
 export const tsConfigFileLocation = join(rootDir, tsConfigFile);
 
 export const drizzleConfigLocation = join(rootDir, drizzleConfigFile);
+export const prismaSchemaLocation = join(rootDir, "prisma", prismaSchemaFile);
 export const dbLocation = join(rootDir, "src", "db", dbFile);
 export const schemasLocation = join(
     rootDir,
