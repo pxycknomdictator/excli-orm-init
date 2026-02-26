@@ -41,7 +41,5 @@ export async function prepareProject(config: ProjectConfig, targetDir: string) {
 
     await fireShell("npx prettier --write . --tab-width 4", targetDir);
 
-    if (config.databaseOrm === "prisma" && config.databaseType === "sql") {
-        await fireShell("npx prisma generate");
-    }
+    if (config.databaseOrm === "prisma") await fireShell("npx prisma generate");
 }

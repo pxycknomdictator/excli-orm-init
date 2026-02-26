@@ -118,6 +118,7 @@ export const prisma = new PrismaClient({ adapter });
 function prismaMongodbConnection(_db: ProjectConfig["database"]) {
     return `
 import { PrismaClient } from "../generated/prisma/client.js";
+
 export const prisma = new PrismaClient();
 `;
 }
