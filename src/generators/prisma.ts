@@ -42,8 +42,6 @@ export async function setupPrisma(config: ProjectConfig) {
     await Promise.all(
         prisma.map(async (config) => await generateFile({ ...config })),
     );
-
-    await fireShell("npx prisma generate");
 }
 
 function prismaSqlSchema() {
