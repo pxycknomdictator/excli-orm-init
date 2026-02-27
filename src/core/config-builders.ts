@@ -12,7 +12,7 @@ import { initializeNodeProject, installPackagesWithManager } from "./installer";
 import type { ProjectConfig } from "src/types";
 import { tsConfig } from "src/managers/tsconfig";
 
-export async function getUserInputs(): Promise<ProjectConfig> {
+export async function getInteractiveInputs(): Promise<ProjectConfig> {
     const databaseType = await promptDatabaseType();
     const database = await promptDatabase(databaseType);
     const databaseOrm = await promptDatabaseOrm(databaseType);

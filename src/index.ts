@@ -2,7 +2,8 @@
 
 import { log, spinner } from "@clack/prompts";
 import { displayBanner } from "./cli";
-import { getUserInputs, prepareProject } from "./core";
+import { prepareProject } from "./core";
+import { getUserInputs } from "./cli/inputs";
 
 async function main() {
     displayBanner();
