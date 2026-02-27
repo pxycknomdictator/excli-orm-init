@@ -2,6 +2,13 @@ import { dbLocation, schemasLocation } from "src/config";
 import type { GenerateFileArgs, Language, ProjectConfig } from "src/types";
 import { concatFileExtension, generateFile } from "src/utils";
 
+const schemaMap: Record<string, () => string> = {
+    sql_ts: typeOrmSqlTsSchema,
+    sql_js: typeOrmSqlJsSchema,
+    no_sql_ts: typeOrmNoSqlTsSchema,
+    no_sql_js: typeOrmNoSqlJsSchema,
+};
+
 export async function setupTypeOrm(config: ProjectConfig) {
     const { language, database, databaseType } = config;
 
@@ -11,8 +18,11 @@ export async function setupTypeOrm(config: ProjectConfig) {
         schemasLocation,
     );
 
-    const typeOrmSchema =
-        databaseType === "sql" ? typeOrmSqlSchema : typeOrmNoSqlSchema;
+    const typeOrmSchema = schemaMap[`${databaseType}_${language}`];
+
+    if (!typeOrmSchema) {
+        throw new Error(`Unsupported combination: ${databaseType}_${language}`);
+    }
 
     const typeorm: GenerateFileArgs[] = [
         { fileLocation: schemasPath!, fileContent: typeOrmSchema() },
@@ -27,7 +37,7 @@ export async function setupTypeOrm(config: ProjectConfig) {
     );
 }
 
-function typeOrmSqlSchema() {
+function typeOrmSqlTsSchema() {
     return `import {
     Entity,
     Column,
@@ -64,7 +74,7 @@ export class User {
 `;
 }
 
-function typeOrmNoSqlSchema() {
+function typeOrmNoSqlTsSchema() {
     return `import {
     Entity,
     Column,
@@ -99,6 +109,88 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 }
+`;
+}
+
+function typeOrmSqlJsSchema() {
+    return `import { EntitySchema } from "typeorm";
+
+export const User = new EntitySchema({
+    name: "User",
+    tableName: "users",
+    columns: {
+        id: {
+            primary: true,
+            type: "int",
+            generated: true,
+        },
+        name: {
+            type: "varchar",
+            length: 255,
+        },
+        age: {
+            type: "int",
+        },
+        email: {
+            type: "varchar",
+            length: 255,
+            unique: true,
+        },
+        isActive: {
+            type: "boolean",
+            default: true,
+        },
+        createdAt: {
+            name: "created_at",
+            type: "timestamp",
+            createDate: true,
+        },
+        updatedAt: {
+            name: "updated_at",
+            type: "timestamp",
+            updateDate: true,
+        },
+    },
+});
+`;
+}
+
+function typeOrmNoSqlJsSchema() {
+    return `import { EntitySchema } from "typeorm";
+
+export const User = new EntitySchema({
+    name: "User",
+    tableName: "users",
+    columns: {
+        _id: {
+            primary: true,
+            type: "objectid",
+            generated: "uuid",
+        },
+        name: {
+            type: String,
+        },
+        age: {
+            type: Number,
+        },
+        email: {
+            type: String,
+            unique: true,
+        },
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
+        createdAt: {
+            type: Date,
+            createDate: true,
+        },
+        updatedAt: {
+            type: Date,
+            updateDate: true,
+        },
+    },
+});
 `;
 }
 
