@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 
 import { log, spinner } from "@clack/prompts";
-import { displayBanner } from "./cli";
 import { prepareProject } from "./core";
 import { getUserInputs } from "./cli/inputs";
 
 async function main() {
-    displayBanner();
-
     const config = await getUserInputs();
     const targetDir = process.cwd();
 

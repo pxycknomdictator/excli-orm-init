@@ -13,6 +13,11 @@ import type { ProjectConfig } from "src/types";
 import { tsConfig } from "src/managers/tsconfig";
 
 export async function getInteractiveInputs(): Promise<ProjectConfig> {
+    const { displayBanner } = await import("src/cli");
+
+    console.clear();
+    displayBanner();
+
     const databaseType = await promptDatabaseType();
     const database = await promptDatabase(databaseType);
     const databaseOrm = await promptDatabaseOrm(databaseType);
