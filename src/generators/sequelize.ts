@@ -1,7 +1,24 @@
-import type { ProjectConfig } from "src/types";
+import { concatFileExtension, generateFile } from "src/utils";
+import { dbLocation, schemasLocation, sequelizeDialectMap } from "src/config";
+import type { GenerateFileArgs, ProjectConfig, SQL_DATABASE } from "src/types";
 
-export async function setupSequelize(_config: ProjectConfig) {
-    sequelizeSchema();
+export async function setupSequelize(config: ProjectConfig) {
+    const { language } = config;
+
+    const [dbPath, schemasPath] = concatFileExtension(
+        language,
+        dbLocation,
+        schemasLocation,
+    );
+
+    const sequelize: GenerateFileArgs[] = [
+        { fileLocation: schemasPath!, fileContent: sequelizeSchema() },
+        { fileLocation: dbPath!, fileContent: sequelizeConnection(config) },
+    ];
+
+    await Promise.all(
+        sequelize.map(async (config) => await generateFile({ ...config })),
+    );
 }
 
 function sequelizeSchema() {
@@ -39,5 +56,28 @@ export const User = sequelize.define(
         timestamps: true,
     },
 );
+`;
+}
+
+function sequelizeConnection(config: ProjectConfig) {
+    const { language, database } = config;
+    const db = sequelizeDialectMap[database as SQL_DATABASE];
+
+    return `import { Sequelize } from "sequelize";
+
+export const sequelize = new Sequelize(process.env.DATABASE_URL${language === "ts" ? "!" : ""}, {
+    dialect: "${db}",
+    logging: false,
+});
+
+export async function database() {
+    try {
+        await sequelize.authenticate();
+        await sequelize.sync();
+        console.log("Database is connected!");
+    } catch (error) {
+        throw new Error("failed to connect with database: ", { cause: error });
+    }
+}
 `;
 }

@@ -97,6 +97,12 @@ export const prismaDialectMap: Record<
     mongodb: "mongodb",
 };
 
+export const sequelizeDialectMap: Record<SQL_DATABASE, string> = {
+    mysql: "mysql",
+    mariadb: "mariadb",
+    postgres: "postgres",
+};
+
 export const installCmdMap: Record<string, string> = {
     npm: "install",
     pnpm: "add",
