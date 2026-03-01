@@ -9,7 +9,7 @@ import type { ProjectConfig, GenerateFileArgs } from "src/types";
 
 const prismaConnectionDatabasesList: Record<
     ProjectConfig["database"],
-    (db: ProjectConfig["database"]) => string
+    (config: ProjectConfig) => string
 > = {
     mysql: prismaMysqlMariadbConnection,
     mariadb: prismaMysqlMariadbConnection,
@@ -23,7 +23,7 @@ export async function setupPrisma(config: ProjectConfig) {
     const prismaSchema =
         databaseType === "sql" ? prismaSqlSchema : prismaNoSqlSchema;
 
-    await initializePrisma(database);
+    await initializePrisma(config);
     await appendExistsFile({
         fileLocation: prismaSchemaLocation,
         fileContent: prismaSchema(),
@@ -35,7 +35,7 @@ export async function setupPrisma(config: ProjectConfig) {
     const prisma: GenerateFileArgs[] = [
         {
             fileLocation: dbPath!,
-            fileContent: prismaConnectionGenerator(database),
+            fileContent: prismaConnectionGenerator(config),
         },
     ];
 
@@ -74,18 +74,24 @@ function prismaNoSqlSchema() {
 `;
 }
 
-async function initializePrisma(db: ProjectConfig["database"]) {
+async function initializePrisma(config: ProjectConfig) {
+    const { database, language } = config;
     try {
-        const provider = db !== "mariadb" ? prismaDialectMap[db] : "mysql";
-        const prismaCli = `npx prisma init --datasource-provider ${provider} --output ../src/generated/prisma`;
+        const provider =
+            database !== "mariadb" ? prismaDialectMap[database] : "mysql";
+        const isLegacyGeneratorProvider =
+            language !== "ts" ? "--generator-provider prisma-client-js" : "";
+        const prismaCli = `npx prisma init --datasource-provider ${provider} --output ../src/generated/prisma ${isLegacyGeneratorProvider}`;
         await fireShell(prismaCli);
     } catch {
         throw new Error("Failed to generate Prisma config");
     }
 }
 
-function prismaMysqlMariadbConnection(db: ProjectConfig["database"]) {
-    const prefix = db === "mysql" ? "MYSQL_" : "MARIADB_";
+function prismaMysqlMariadbConnection(config: ProjectConfig) {
+    const { database } = config;
+
+    const prefix = database === "mysql" ? "MYSQL_" : "MARIADB_";
 
     return `
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
@@ -103,19 +109,21 @@ export const prisma = new PrismaClient({ adapter });
 `;
 }
 
-function prismaPostgresConnection(_db: ProjectConfig["database"]) {
+function prismaPostgresConnection(config: ProjectConfig) {
+    const { language } = config;
+
     return `
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client.js";
 
-const connectionString = process.env.DATABASE_URL!;
+const connectionString = process.env.DATABASE_URL${language === "ts" ? "!" : ""};
 
 const adapter = new PrismaPg({ connectionString });
 export const prisma = new PrismaClient({ adapter });
 `;
 }
 
-function prismaMongodbConnection(_db: ProjectConfig["database"]) {
+function prismaMongodbConnection(_config: ProjectConfig) {
     return `
 import { PrismaClient } from "../generated/prisma/client.js";
 
