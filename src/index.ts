@@ -15,6 +15,13 @@ async function main() {
 
     s.stop(`Successfully created project`);
     log.success(`Scaffolding project in ${targetDir}...`);
+
+    if (config.database === "mariadb" && config.databaseOrm === "sequelize") {
+        console.log(
+            "\x1b[33m%s\x1b[0m",
+            "👉 Tip: Since you're using MariaDB, make sure your DATABASE_URL starts with 'mariadb://'",
+        );
+    }
 }
 
 main().catch((error) => {

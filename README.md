@@ -190,13 +190,32 @@ Not every ORM works with every database. Here's the full compatibility matrix:
 
 ### ⚠️ Important Notes
 
+#### Sequelize — MariaDB Connection Protocol
+
+If you are using **MariaDB** with **Sequelize**, the connection protocol in your `.env` file must match the dialect.
+
+**Why this is important:**
+Sequelize uses different underlying drivers for MySQL (`mysql2`) and MariaDB (`mariadb`). If your connection string starts with `mysql://`, Sequelize will ignore the MariaDB configuration and try to load the MySQL driver, which will lead to a "driver not found" error.
+
+**How to fix it:**
+Ensure your `DATABASE_URL` in .env (or connection string) specifically uses the `mariadb://` prefix:
+
+```env
+# ❌ Incorrect (will cause 'Please install mysql2' error)
+DATABASE_URL="mysql://root:password@localhost:3306/app_db"
+
+# ✅ Correct for MariaDB
+DATABASE_URL="mariadb://root:password@localhost:3306/app_db"
+
 #### Prisma — Shadow Database Issue
 
 When running Prisma migrations (especially with MySQL or MariaDB), you may encounter the following error:
 
 ```
+
 Error: P3014 - Prisma Migrate could not create the shadow database.
-```
+
+````
 
 **Why does this happen?**
 Prisma requires a **shadow database** during migrations to detect schema drift. By default, it tries to create and drop a temporary database — which requires elevated database privileges.
@@ -210,7 +229,7 @@ DATABASE_URL="mysql://appuser:password@localhost:3306/mydb"
 
 # ✅ Root credentials — required for Prisma migrations
 DATABASE_URL="mysql://root:rootpassword@localhost:3306/mydb"
-```
+````
 
 > This is only required during development migrations (`prisma migrate dev`). In production, you use `prisma migrate deploy` which does **not** require shadow database creation.
 
