@@ -12,6 +12,20 @@ import type {
     SQL_DATABASE,
 } from "src/types";
 
+const drizzleSchemasList = {
+    mysql: drizzleMysqlMariadbSchema,
+    mariadb: drizzleMysqlMariadbSchema,
+    sqlite: drizzleSqliteSchema,
+    postgres: drizzlePostgresSchema,
+};
+
+const drizzleImportsMap = {
+    mysql: "mysql2",
+    mariadb: "mysql2",
+    sqlite: "libsql",
+    postgres: "node-postgres",
+};
+
 export async function setupDrizzle(config: ProjectConfig) {
     const { language, database } = config;
 
@@ -22,10 +36,7 @@ export async function setupDrizzle(config: ProjectConfig) {
         schemasLocation,
     );
 
-    const drizzleSchema =
-        database === "postgres"
-            ? drizzlePostgresSchema
-            : drizzleMysqlMariadbSchema;
+    const drizzleSchema = drizzleSchemasList[database as SQL_DATABASE];
 
     const drizzle: GenerateFileArgs[] = [
         {
@@ -110,8 +121,29 @@ export const usersTable = mysqlTable("users", {
 `;
 }
 
+function drizzleSqliteSchema() {
+    return `import { sql } from "drizzle-orm";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+
+export const usersTable = sqliteTable("users", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
+    age: integer("age").notNull(),
+    email: text("email").notNull().unique(),
+    isActive: integer("is_active", { mode: "boolean" }).default(true),
+    createdAt: integer("created_at", { mode: "timestamp" })
+        .notNull()
+        .default(sql\`CURRENT_TIMESTAMP\`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+        .notNull()
+        .default(sql\`CURRENT_TIMESTAMP\`)
+        .$onUpdate(() => new Date()),
+});
+`;
+}
+
 function drizzleConnection(db: SQL_DATABASE, lang: Language) {
-    const module = db === "postgres" ? "node-postgres" : "mysql2";
+    const module = drizzleImportsMap[db];
 
     return `import { drizzle } from "drizzle-orm/${module}";
 
