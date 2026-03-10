@@ -74,11 +74,12 @@ export const prismaScripts: ScriptConfig = {
 };
 
 export const drizzleDialectMap: Record<
-    Extract<SQL_DATABASE, "mysql" | "postgres">,
+    Extract<SQL_DATABASE, "mysql" | "postgres" | "sqlite">,
     string
 > = {
     mysql: "mysql",
     postgres: "postgresql",
+    sqlite: "sqlite",
 };
 
 export const typeOrmDbTypeMap: Record<ProjectConfig["database"], string> = {
@@ -86,21 +87,27 @@ export const typeOrmDbTypeMap: Record<ProjectConfig["database"], string> = {
     mariadb: "mariadb",
     postgres: "postgres",
     mongodb: "mongodb",
+    sqlite: "sqlite",
 };
 
 export const prismaDialectMap: Record<
-    Extract<ProjectConfig["database"], "mysql" | "postgres" | "mongodb">,
+    Extract<
+        ProjectConfig["database"],
+        "mysql" | "postgres" | "mongodb" | "sqlite"
+    >,
     string
 > = {
     mysql: "mysql",
     postgres: "postgresql",
     mongodb: "mongodb",
+    sqlite: "sqlite",
 };
 
 export const sequelizeDialectMap: Record<SQL_DATABASE, string> = {
     mysql: "mysql",
     mariadb: "mariadb",
     postgres: "postgres",
+    sqlite: "sqlite",
 };
 
 export const installCmdMap: Record<string, string> = {
@@ -122,7 +129,7 @@ export function getDrizzlePackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<"mysql" | "postgres", PackageConfig> = {
+    const base: Record<"mysql" | "postgres" | "sqlite", PackageConfig> = {
         mysql: {
             packages: ["drizzle-orm", "mysql2"],
             devPackages: ["drizzle-kit"],
@@ -131,10 +138,14 @@ export function getDrizzlePackages(
             packages: ["drizzle-orm", "pg"],
             devPackages: ["drizzle-kit"],
         },
+        sqlite: {
+            packages: ["drizzle-orm", "@libsql/client"],
+            devPackages: ["drizzle-kit"],
+        },
     };
 
     const normalizedDb =
-        db !== "mariadb" ? (db as "mysql" | "postgres") : "mysql";
+        db !== "mariadb" ? (db as "mysql" | "postgres" | "sqlite") : "mysql";
     const config = base[normalizedDb];
 
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
@@ -155,6 +166,7 @@ export function getSequelizePackages(
             packages: ["sequelize", "pg", "pg-hstore"],
             devPackages: [],
         },
+        sqlite: { packages: ["sequelize", "sqlite3"], devPackages: [] },
     };
 
     const config = base[db as SQL_DATABASE];
@@ -169,13 +181,20 @@ export function getTypeOrmPackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<"mysql" | "postgres" | "mongodb", PackageConfig> = {
+    const base: Record<
+        "mysql" | "postgres" | "mongodb" | "sqlite",
+        PackageConfig
+    > = {
         mysql: {
             packages: ["typeorm", "mysql2", "reflect-metadata"],
             devPackages: [],
         },
         postgres: {
             packages: ["typeorm", "pg", "reflect-metadata"],
+            devPackages: [],
+        },
+        sqlite: {
+            packages: ["typeorm", "sqlite3", "reflect-metadata"],
             devPackages: [],
         },
         mongodb: {
@@ -215,7 +234,10 @@ export function getPrismaPackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<"mysql" | "postgres" | "mongodb", PackageConfig> = {
+    const base: Record<
+        "mysql" | "postgres" | "mongodb" | "sqlite",
+        PackageConfig
+    > = {
         mysql: {
             packages: ["@prisma/client", "@prisma/adapter-mariadb"],
             devPackages: ["prisma"],
@@ -224,6 +246,10 @@ export function getPrismaPackages(
             packages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
             devPackages: ["prisma"],
         },
+        sqlite: {
+            packages: ["@prisma/client", "@prisma/adapter-better-sqlite3"],
+            devPackages: ["prisma", "@types/better-sqlite3"],
+        },
         mongodb: {
             packages: ["@prisma/client@6.19"],
             devPackages: ["prisma@6.19"],
@@ -231,7 +257,9 @@ export function getPrismaPackages(
     };
 
     const normalizedDb =
-        db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
+        db !== "mariadb"
+            ? (db as "mysql" | "postgres" | "mongodb" | "sqlite")
+            : "mysql";
     const config = base[normalizedDb];
 
     config.packages.push("dotenv");

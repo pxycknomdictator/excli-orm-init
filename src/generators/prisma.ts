@@ -14,6 +14,7 @@ const prismaConnectionDatabasesList: Record<
     mysql: prismaMysqlMariadbConnection,
     mariadb: prismaMysqlMariadbConnection,
     postgres: prismaPostgresConnection,
+    sqlite: prismaSqliteConnection,
     mongodb: prismaMongodbConnection,
 };
 
@@ -105,6 +106,20 @@ const adapter = new PrismaMariaDb({
   connectionLimit: 5,
 });
 
+export const prisma = new PrismaClient({ adapter });
+`;
+}
+
+function prismaSqliteConnection(config: ProjectConfig) {
+    const { language } = config;
+
+    return `
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "../generated/prisma/client.js";
+
+const connectionString = process.env.DB_FILE_NAME${language === "ts" ? "!" : ""};
+
+const adapter = new PrismaBetterSqlite3({ url: connectionString });
 export const prisma = new PrismaClient({ adapter });
 `;
 }

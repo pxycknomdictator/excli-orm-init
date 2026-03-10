@@ -1,6 +1,6 @@
 export type DATABASE_TYPE = "sql" | "no_sql";
 
-export type SQL_DATABASE = "mysql" | "mariadb" | "postgres";
+export type SQL_DATABASE = "mysql" | "mariadb" | "postgres" | "sqlite";
 export type SQL_ORMS = "prisma" | "drizzle" | "typeorm" | "sequelize";
 
 export type NO_SQL_DATABASE = "mongodb";
