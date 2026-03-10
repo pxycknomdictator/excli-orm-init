@@ -117,7 +117,7 @@ function prismaSqliteConnection(config: ProjectConfig) {
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "../generated/prisma/client.js";
 
-const connectionString = process.env.DB_FILE_NAME${language === "ts" ? "!" : ""};
+const connectionString = process.env.DATABASE_URL${language === "ts" ? "!" : ""};
 
 const adapter = new PrismaBetterSqlite3({ url: connectionString });
 export const prisma = new PrismaClient({ adapter });
