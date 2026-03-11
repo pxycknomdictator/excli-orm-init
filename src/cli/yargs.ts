@@ -17,41 +17,50 @@ export function getYargsInputs(): ProjectConfig {
         .option("mysql", {
             type: "boolean",
             description: "Use MySQL",
-            conflicts: ["mariadb", "postgres", "mongodb"],
+            conflicts: ["mariadb", "postgres", "mongodb", "sqlite"],
         })
         .option("mariadb", {
             type: "boolean",
             description: "Use MariaDB",
-            conflicts: ["mysql", "postgres", "mongodb"],
+            conflicts: ["mysql", "postgres", "mongodb", "sqlite"],
         })
         .option("postgres", {
             type: "boolean",
             description: "Use PostgreSQL",
-            conflicts: ["mysql", "mariadb", "mongodb"],
+            conflicts: ["mysql", "mariadb", "mongodb", "sqlite"],
         })
         .option("mongodb", {
             type: "boolean",
             description: "Use MongoDB",
-            conflicts: ["mysql", "mariadb", "postgres"],
+            conflicts: ["mysql", "mariadb", "postgres", "sqlite"],
+        })
+        .option("sqlite", {
+            type: "boolean",
+            description: "Use SQLite",
+            conflicts: ["mysql", "mariadb", "postgres", "mongodb"],
         })
         .option("prisma", {
             type: "boolean",
-            description: "Use Prisma (MySQL, MariaDB, PostgreSQL, MongoDB)",
+            description:
+                "Use Prisma (MySQL, MariaDB, PostgreSQL, MongoDB, SQLite)",
             conflicts: ["drizzle", "typeorm", "sequelize", "mongoose"],
         })
         .option("drizzle", {
             type: "boolean",
-            description: "Use Drizzle (MySQL, MariaDB, PostgreSQL only)",
+            description:
+                "Use Drizzle (MySQL, MariaDB, PostgreSQL, SQLite only)",
             conflicts: ["prisma", "typeorm", "sequelize", "mongoose"],
         })
         .option("typeorm", {
             type: "boolean",
-            description: "Use TypeORM (MySQL, MariaDB, PostgreSQL, MongoDB)",
+            description:
+                "Use TypeORM (MySQL, MariaDB, PostgreSQL, MongoDB, SQLite)",
             conflicts: ["prisma", "drizzle", "sequelize", "mongoose"],
         })
         .option("sequelize", {
             type: "boolean",
-            description: "Use Sequelize (MySQL, MariaDB, PostgreSQL only)",
+            description:
+                "Use Sequelize (MySQL, MariaDB, PostgreSQL, SQLite only)",
             conflicts: ["prisma", "drizzle", "typeorm", "mongoose"],
         })
         .option("mongoose", {
@@ -83,9 +92,15 @@ export function getYargsInputs(): ProjectConfig {
             if (!argv.ts && !argv.js)
                 throw new Error("You must specify a language: --ts or --js");
 
-            if (!argv.mysql && !argv.mariadb && !argv.postgres && !argv.mongodb)
+            if (
+                !argv.mysql &&
+                !argv.mariadb &&
+                !argv.postgres &&
+                !argv.mongodb &&
+                !argv.sqlite
+            )
                 throw new Error(
-                    "You must specify a database: --mysql, --mariadb, --postgres, or --mongodb",
+                    "You must specify a database: --mysql, --mariadb, --postgres, --mongodb, or --sqlite",
                 );
 
             if (
@@ -99,7 +114,8 @@ export function getYargsInputs(): ProjectConfig {
                     "You must specify an ORM: --prisma, --drizzle, --typeorm, --sequelize, or --mongoose",
                 );
 
-            const isSql = argv.mysql || argv.mariadb || argv.postgres;
+            const isSql =
+                argv.mysql || argv.mariadb || argv.postgres || argv.sqlite;
             const isNoSql = argv.mongodb;
 
             if (isNoSql && argv.drizzle)
@@ -148,6 +164,9 @@ export function getYargsInputs(): ProjectConfig {
     } else if (argv.mongodb) {
         database = "mongodb";
         databaseType = "no_sql";
+    } else if (argv.sqlite) {
+        database = "sqlite";
+        databaseType = "sql";
     } else throw new Error("Invalid database");
 
     let databaseOrm: ProjectConfig["databaseOrm"];
