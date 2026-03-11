@@ -44,7 +44,12 @@ export const packageJsonLocation = join(rootDir, packageJson);
 
 export const BANNER_FONT = "Standard";
 
-export const sql_database: SQL_DATABASE[] = ["mysql", "mariadb", "postgres"];
+export const sql_database: SQL_DATABASE[] = [
+    "mysql",
+    "mariadb",
+    "postgres",
+    "sqlite",
+];
 export const no_sql_database: NO_SQL_DATABASE[] = ["mongodb"];
 
 export const sql_orms: SQL_ORMS[] = [

@@ -195,13 +195,15 @@ export const User = new EntitySchema({
 }
 
 function typeOrmConnection(db: ProjectConfig["database"], lang: Language) {
+    const connection = db !== "sqlite" ? "url" : "database";
+
     return `import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./models/schemas.js";
 
 export const AppDataSource = new DataSource({
     type: "${db}",
-    url: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
+    ${connection}: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
     synchronize: true,
     entities: [User],
 });
