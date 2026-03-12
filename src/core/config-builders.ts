@@ -7,10 +7,9 @@ import {
 } from "src/cli";
 import { ormsList, tsConfigFileLocation } from "src/config";
 import { fireShell, generateFile, isFileExists } from "src/utils";
-import { modifyPackageJson } from "src/managers";
+import { modifyPackageJson, tsConfig } from "src/managers";
 import { initializeNodeProject, installPackagesWithManager } from "./installer";
 import type { ProjectConfig } from "src/types";
-import { tsConfig } from "src/managers/tsconfig";
 
 export async function getInteractiveInputs(): Promise<ProjectConfig> {
     const { displayBanner } = await import("src/cli");
