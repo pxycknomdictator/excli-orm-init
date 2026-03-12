@@ -48,9 +48,9 @@ export async function setupPrisma(config: ProjectConfig) {
 function prismaSqlSchema() {
     return `model User {
   id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
+  name      String
   age       Int
-  email     String   @unique @db.VarChar(255)
+  email     String   @unique
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
