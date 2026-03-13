@@ -6,6 +6,18 @@ export type SQL_ORMS = "prisma" | "drizzle" | "typeorm" | "sequelize";
 export type NO_SQL_DATABASE = "mongodb";
 export type NO_SQL_ORMS = "prisma" | "typeorm" | "mongoose";
 
+export type DATABASE_PROMPTS = {
+    label: string;
+    emoji: string;
+    value: string;
+};
+
+export type ORM_PROMPTS = {
+    label: string;
+    emoji: string;
+    value: string;
+};
+
 export type Language = "ts" | "js";
 
 export type PACKAGE_MANAGER = "npm" | "yarn" | "pnpm" | "bun";
