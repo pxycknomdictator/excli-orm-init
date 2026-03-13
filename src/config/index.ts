@@ -7,12 +7,11 @@ import {
     setupPrisma,
 } from "src/generators";
 import type {
-    DATABASE_PROMPTS,
-    ORM_PROMPTS,
     PackageConfig,
     ProjectConfig,
     ScriptConfig,
     SQL_DATABASE,
+    INTERACTIVE_PROMPTS,
 } from "src/types";
 
 const rootDir = process.cwd();
@@ -43,25 +42,25 @@ export const packageJsonLocation = join(rootDir, packageJson);
 
 export const BANNER_FONT = "Standard";
 
-export const sql_database: DATABASE_PROMPTS[] = [
+export const sql_database: INTERACTIVE_PROMPTS[] = [
     { label: "MySQL", emoji: "🐬", value: "mysql" },
     { label: "MariaDB", emoji: "🦭", value: "mariadb" },
     { label: "SQLite", emoji: "🪶", value: "sqlite" },
     { label: "PostgreSQL", emoji: "🐘", value: "postgres" },
 ];
 
-export const no_sql_database: DATABASE_PROMPTS[] = [
+export const no_sql_database: INTERACTIVE_PROMPTS[] = [
     { label: "MongoDB", emoji: "🍃", value: "mongodb" },
 ];
 
-export const sql_orms: ORM_PROMPTS[] = [
+export const sql_orms: INTERACTIVE_PROMPTS[] = [
     { label: "Prisma", emoji: "📐", value: "prisma" },
     { label: "Drizzle", emoji: "⚡", value: "drizzle" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Sequelize", emoji: "🐚", value: "sequelize" },
 ];
 
-export const no_sql_orms: ORM_PROMPTS[] = [
+export const no_sql_orms: INTERACTIVE_PROMPTS[] = [
     { label: "Prisma", emoji: "📐", value: "prisma" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Mongoose", emoji: "🦦", value: "mongoose" },

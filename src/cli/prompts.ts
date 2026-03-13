@@ -7,10 +7,9 @@ import {
     sql_orms,
 } from "src/config";
 import type {
-    DATABASE_PROMPTS,
     DATABASE_TYPE,
-    ORM_PROMPTS,
     ProjectConfig,
+    INTERACTIVE_PROMPTS,
 } from "src/types";
 
 export async function promptDatabaseType(): Promise<
@@ -36,10 +35,12 @@ export async function promptDatabase(
 
     const database = await select({
         message: "Choose your database",
-        options: options.map(({ label, emoji, value }: DATABASE_PROMPTS) => ({
-            label: `${label} ${emoji}`,
-            value: value,
-        })),
+        options: options.map(
+            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+                label: `${label} ${emoji}`,
+                value: value,
+            }),
+        ),
     });
 
     if (isCancel(database)) terminate("Process cancelled ❌");
@@ -54,10 +55,12 @@ export async function promptDatabaseOrm(
 
     const orm = await select({
         message: "Choose your ORM",
-        options: options.map(({ label, emoji, value }: ORM_PROMPTS) => ({
-            label: `${label} ${emoji}`,
-            value: value,
-        })),
+        options: options.map(
+            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+                label: `${label} ${emoji}`,
+                value: value,
+            }),
+        ),
     });
 
     if (isCancel(orm)) terminate("Process cancelled ❌");
