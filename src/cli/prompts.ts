@@ -6,7 +6,12 @@ import {
     sql_database,
     sql_orms,
 } from "src/config";
-import type { DATABASE_TYPE, ProjectConfig } from "src/types";
+import type {
+    DATABASE_PROMPTS,
+    DATABASE_TYPE,
+    ORM_PROMPTS,
+    ProjectConfig,
+} from "src/types";
 
 export async function promptDatabaseType(): Promise<
     ProjectConfig["databaseType"]
@@ -31,9 +36,9 @@ export async function promptDatabase(
 
     const database = await select({
         message: "Choose your database",
-        options: options.map((db) => ({
-            label: db.toUpperCase(),
-            value: db,
+        options: options.map(({ label, emoji, value }: DATABASE_PROMPTS) => ({
+            label: `${label} ${emoji}`,
+            value: value,
         })),
     });
 
@@ -49,9 +54,9 @@ export async function promptDatabaseOrm(
 
     const orm = await select({
         message: "Choose your ORM",
-        options: options.map((orm) => ({
-            label: orm.toUpperCase(),
-            value: orm,
+        options: options.map(({ label, emoji, value }: ORM_PROMPTS) => ({
+            label: `${label} ${emoji}`,
+            value: value,
         })),
     });
 
