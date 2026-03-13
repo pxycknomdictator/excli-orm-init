@@ -1,8 +1,11 @@
 import { isCancel, select } from "@clack/prompts";
 import { terminate } from "src/utils";
 import {
+    database_types,
+    languages,
     no_sql_database,
     no_sql_orms,
+    pkg_managers,
     sql_database,
     sql_orms,
 } from "src/config";
@@ -17,10 +20,12 @@ export async function promptDatabaseType(): Promise<
 > {
     const databaseType = await select({
         message: "Select your Database type:",
-        options: [
-            { label: "SQL", value: "sql" },
-            { label: "NOSQL", value: "no_sql" },
-        ],
+        options: database_types.map(
+            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+                label: `${label} ${emoji}`,
+                value: value,
+            }),
+        ),
     });
 
     if (isCancel(databaseType)) terminate("Process cancelled ❌");
@@ -71,10 +76,12 @@ export async function promptDatabaseOrm(
 export async function promptLanguage(): Promise<ProjectConfig["language"]> {
     const language = await select({
         message: "Select your programming language:",
-        options: [
-            { label: "TypeScript", value: "ts" },
-            { label: "JavaScript", value: "js" },
-        ],
+        options: languages.map(
+            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+                label: `${label} ${emoji}`,
+                value: value,
+            }),
+        ),
     });
 
     if (isCancel(language)) terminate("Process cancelled ❌");
@@ -85,12 +92,12 @@ export async function promptLanguage(): Promise<ProjectConfig["language"]> {
 export async function promptPkgManager(): Promise<ProjectConfig["pkgManager"]> {
     const pkgManager = await select({
         message: "Select your package manager:",
-        options: [
-            { label: "npm", value: "npm" },
-            { label: "yarn", value: "yarn" },
-            { label: "pnpm", value: "pnpm" },
-            { label: "bun", value: "bun" },
-        ],
+        options: pkg_managers.map(
+            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+                label: `${label} ${emoji}`,
+                value: value,
+            }),
+        ),
     });
 
     if (isCancel(pkgManager)) terminate("Process cancelled ❌");

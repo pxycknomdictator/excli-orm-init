@@ -42,6 +42,11 @@ export const packageJsonLocation = join(rootDir, packageJson);
 
 export const BANNER_FONT = "Standard";
 
+export const database_types: INTERACTIVE_PROMPTS[] = [
+    { label: "SQL", emoji: "🗃️", value: "sql" },
+    { label: "NoSQL", emoji: "🌿", value: "no_sql" },
+];
+
 export const sql_database: INTERACTIVE_PROMPTS[] = [
     { label: "MySQL", emoji: "🐬", value: "mysql" },
     { label: "MariaDB", emoji: "🦭", value: "mariadb" },
@@ -64,6 +69,18 @@ export const no_sql_orms: INTERACTIVE_PROMPTS[] = [
     { label: "Prisma", emoji: "📐", value: "prisma" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Mongoose", emoji: "🦦", value: "mongoose" },
+];
+
+export const languages: INTERACTIVE_PROMPTS[] = [
+    { label: "JavaScript", emoji: "🟡", value: "js" },
+    { label: "TypeScript", emoji: "🔵", value: "ts" },
+];
+
+export const pkg_managers: INTERACTIVE_PROMPTS[] = [
+    { label: "npm", emoji: "📦", value: "npm" },
+    { label: "yarn", emoji: "🧶", value: "yarn" },
+    { label: "pnpm", emoji: "🚀", value: "pnpm" },
+    { label: "bun", emoji: "🥟", value: "bun" },
 ];
 
 export const drizzleScripts: ScriptConfig = {
