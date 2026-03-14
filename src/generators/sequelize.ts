@@ -61,14 +61,23 @@ export const User = sequelize.define(
 
 function sequelizeConnection(config: ProjectConfig) {
     const { language, database } = config;
-    const db = sequelizeDialectMap[database as SQL_DATABASE];
+    const db = sequelizeDialectMap[database as SQL_DATABASE] as SQL_DATABASE;
+    const isSQLite = database === "sqlite";
+
+    const sequelizeInit = isSQLite
+        ? `new Sequelize({
+    dialect: "sqlite",
+    storage: process.env.DATABASE_URL${language === "ts" ? "!" : ""},
+    logging: false,
+})`
+        : `new Sequelize(process.env.DATABASE_URL${language === "ts" ? "!" : ""}, {
+    dialect: "${db}",
+    logging: false,
+})`;
 
     return `import { Sequelize } from "sequelize";
 
-export const sequelize = new Sequelize(process.env.DATABASE_URL${language === "ts" ? "!" : ""}, {
-    dialect: "${db}",
-    logging: false,
-});
+export const sequelize = ${sequelizeInit};
 
 export async function database() {
     try {
