@@ -309,3 +309,10 @@ export const ormsPackagesList: Record<ORMs, ORMFn> = {
     sequelize: getSequelizePackages,
     mongoose: getMongoosePackages,
 };
+
+export function generateOptions(options: INTERACTIVE_PROMPTS[]) {
+    return options.map(({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+        label: `${label} ${emoji}`,
+        value: value,
+    }));
+}

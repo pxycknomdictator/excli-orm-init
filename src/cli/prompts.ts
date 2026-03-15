@@ -8,24 +8,16 @@ import {
     pkg_managers,
     sql_database,
     sql_orms,
+    generateOptions,
 } from "src/config";
-import type {
-    DATABASE_TYPE,
-    ProjectConfig,
-    INTERACTIVE_PROMPTS,
-} from "src/types";
+import type { DATABASE_TYPE, ProjectConfig } from "src/types";
 
 export async function promptDatabaseType(): Promise<
     ProjectConfig["databaseType"]
 > {
     const databaseType = await select({
         message: "Select your Database type:",
-        options: database_types.map(
-            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
-                label: `${label} ${emoji}`,
-                value: value,
-            }),
-        ),
+        options: generateOptions(database_types),
     });
 
     if (isCancel(databaseType)) terminate("Process cancelled ❌");
@@ -40,12 +32,7 @@ export async function promptDatabase(
 
     const database = await select({
         message: "Choose your database",
-        options: options.map(
-            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
-                label: `${label} ${emoji}`,
-                value: value,
-            }),
-        ),
+        options: generateOptions(options),
     });
 
     if (isCancel(database)) terminate("Process cancelled ❌");
@@ -60,12 +47,7 @@ export async function promptDatabaseOrm(
 
     const orm = await select({
         message: "Choose your ORM",
-        options: options.map(
-            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
-                label: `${label} ${emoji}`,
-                value: value,
-            }),
-        ),
+        options: generateOptions(options),
     });
 
     if (isCancel(orm)) terminate("Process cancelled ❌");
@@ -76,12 +58,7 @@ export async function promptDatabaseOrm(
 export async function promptLanguage(): Promise<ProjectConfig["language"]> {
     const language = await select({
         message: "Select your programming language:",
-        options: languages.map(
-            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
-                label: `${label} ${emoji}`,
-                value: value,
-            }),
-        ),
+        options: generateOptions(languages),
     });
 
     if (isCancel(language)) terminate("Process cancelled ❌");
@@ -92,12 +69,7 @@ export async function promptLanguage(): Promise<ProjectConfig["language"]> {
 export async function promptPkgManager(): Promise<ProjectConfig["pkgManager"]> {
     const pkgManager = await select({
         message: "Select your package manager:",
-        options: pkg_managers.map(
-            ({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
-                label: `${label} ${emoji}`,
-                value: value,
-            }),
-        ),
+        options: generateOptions(pkg_managers),
     });
 
     if (isCancel(pkgManager)) terminate("Process cancelled ❌");
