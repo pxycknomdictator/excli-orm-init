@@ -194,13 +194,14 @@ export const User = new EntitySchema({
 
 function typeOrmConnection(db: ProjectConfig["database"], lang: Language) {
     const connection = db !== "sqlite" ? "url" : "database";
+    const dialectType = db !== "sqlite" ? db : "better-sqlite3";
 
     return `import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./models/schemas.js";
 
 export const AppDataSource = new DataSource({
-    type: "${db}",
+    type: "${dialectType}",
     ${connection}: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
     synchronize: true,
     entities: [User],

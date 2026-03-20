@@ -222,8 +222,8 @@ export function getTypeOrmPackages(
             devPackages: [],
         },
         sqlite: {
-            packages: ["typeorm", "sqlite3", "reflect-metadata"],
-            devPackages: [],
+            packages: ["typeorm", "better-sqlite3", "reflect-metadata"],
+            devPackages: ["@types/better-sqlite3"],
         },
         mongodb: {
             packages: ["typeorm", "mongodb", "reflect-metadata"],
