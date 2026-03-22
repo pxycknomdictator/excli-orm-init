@@ -11,28 +11,63 @@ A CLI tool for setting up popular SQL and NoSQL ORMs/ODMs in Node.js projects, w
 
 ---
 
-## Features
+### Why Choose This Tool?
 
-- 🗄️ **SQL** — MySQL, MariaDB, PostgreSQL
+Stop wiring ORM boilerplate manually. `@excli/orm-init` gets your database layer production-ready in seconds, whether you're starting fresh or dropping into an existing project.
+
+**Built for modern development:**
+
+- 🗄️ **SQL** — MySQL, MariaDB, PostgreSQL, SQLite
 - 🍃 **NoSQL** — MongoDB
 - 🔗 **ORMs/ODMs** — Prisma, Sequelize, TypeORM, Drizzle, Mongoose
-- 🚀 **JS & TS** support
-- 📦 **Package managers** — npm, yarn, pnpm, bun
+- 🚀 TypeScript & JavaScript support
+- 📦 Works with npm, yarn, pnpm, and bun
 - ⚡ Interactive and flag-based modes
 
 ---
 
-## Usage
+### Getting Started
 
-### Interactive Mode
+No installation needed! Just run:
 
 ```bash
 npx @excli/orm-init
 ```
 
-Guides you through selecting database, ORM, language, and package manager.
+**Or install globally:**
 
-### Flag-Based Mode
+```bash
+npm install -g @excli/orm-init
+excli-orm-init [flags]
+```
+
+#### Requirements
+
+- Node.js 20 or higher
+- A running database (local or via [`@excli/docker`](https://www.npmjs.com/package/@excli/docker))
+
+---
+
+### Usage
+
+#### Interactive Mode
+
+Run the CLI and follow the prompts:
+
+```bash
+npx @excli/orm-init
+```
+
+**You'll be asked about:**
+
+1. **Language** — TypeScript or JavaScript
+2. **Database** — MySQL, MariaDB, PostgreSQL, SQLite, or MongoDB
+3. **ORM/ODM** — Your preferred ORM for the chosen database
+4. **Package Manager** — npm, yarn, pnpm, or bun
+
+#### Flag-Based Mode
+
+Skip the prompts and pass everything directly:
 
 ```bash
 # TypeScript + PostgreSQL + Prisma + pnpm
@@ -49,57 +84,52 @@ npx @excli/orm-init --ts --bun --postgres --drizzle
 
 # JavaScript + MySQL + Sequelize + pnpm
 npx @excli/orm-init --js --pnpm --mysql --sequelize
+
+# TypeScript + SQLite + Drizzle + pnpm
+npx @excli/orm-init --ts --pnpm --sqlite --drizzle
 ```
-
-### Global Install
-
-```bash
-npm install -g @excli/orm-init
-excli-orm-init [flags]
-```
-
-### Requirements
-
-- Node.js 20+
-- A running database (local or via [`@excli/docker`](https://www.npmjs.com/package/@excli/docker))
 
 ---
 
-## Flags
+### Flags
 
 | Category            | Flag                                                          | Description              |
 | ------------------- | ------------------------------------------------------------- | ------------------------ |
 | **Language**        | `--ts` / `--js`                                               | TypeScript or JavaScript |
-| **Database**        | `--mysql` `--mariadb` `--postgres` `--mongodb`                | Target database          |
+| **Database**        | `--mysql` `--mariadb` `--postgres` `--mongodb` `--sqlite`     | Target database          |
 | **ORM/ODM**         | `--prisma` `--sequelize` `--typeorm` `--drizzle` `--mongoose` | ORM/ODM to configure     |
 | **Package Manager** | `--npm` `--yarn` `--pnpm` `--bun`                             | Package manager to use   |
 
 ---
 
-## Compatibility Matrix
+### What's Included
 
-| ORM / ODM     | MySQL | MariaDB | PostgreSQL | MongoDB |
-| ------------- | :---: | :-----: | :--------: | :-----: |
-| **Prisma**    |  ✅   |   ✅    |     ✅     |   ✅    |
-| **Sequelize** |  ✅   |   ✅    |     ✅     |   ❌    |
-| **TypeORM**   |  ✅   |   ✅    |     ✅     |   ✅    |
-| **Drizzle**   |  ✅   |   ✅    |     ✅     |   ❌    |
-| **Mongoose**  |  ❌   |   ❌    |     ❌     |   ✅    |
+#### Generated Files
+
+After running the CLI, you get:
+
+- **ORM config file** — pre-configured database connection
+- **Schema / Model file** — starter schema or model for your chosen ORM
+
+> **Note:** `.env`, `.env.example`, and `.gitignore` are **not** generated. This is intentional so the tool integrates safely into both new and existing projects. Use [`@excli/docker`](https://www.npmjs.com/package/@excli/docker) to auto-generate a complete `.env`, or create one manually.
+
+#### Compatibility Matrix
+
+| ORM / ODM     | MySQL | MariaDB | PostgreSQL | SQLite | MongoDB |
+| ------------- | :---: | :-----: | :--------: | :----: | :-----: |
+| **Prisma**    |  ✅   |   ✅    |     ✅     |   ✅   |   ✅    |
+| **Sequelize** |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
+| **TypeORM**   |  ✅   |   ✅    |     ✅     |   ✅   |   ✅    |
+| **Drizzle**   |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
+| **Mongoose**  |  ❌   |   ❌    |     ❌     |   ❌   |   ✅    |
 
 Incompatible combinations are caught at runtime — the CLI will prompt you to correct them.
 
 ---
 
-## What Gets Generated
+### Known Issues & Gotchas
 
-- **ORM config file** — pre-configured database connection
-- **Schema / Model file** — starter schema or model for your chosen ORM
-
-> **Note:** `.env`, `.env.example`, and `.gitignore` are **not** generated. This is intentional so the tool integrates safely into both new and existing projects. Use [`@excli/docker`](https://www.npmjs.com/package/@excli/docker) to auto-generate a complete `.env`, or create one manually (see below).
-
-## Known Issues & Gotchas
-
-### Sequelize + MariaDB — Connection String Prefix
+#### Sequelize + MariaDB — Connection String Prefix
 
 The `DATABASE_URL` must use the `mariadb://` prefix, not `mysql://`. Using the wrong prefix causes Sequelize to load the wrong driver.
 
@@ -111,7 +141,7 @@ DATABASE_URL="mysql://root:password@localhost:3306/mydb"
 DATABASE_URL="mariadb://root:password@localhost:3306/mydb"
 ```
 
-### Prisma — Shadow Database Error
+#### Prisma — Shadow Database Error
 
 During `prisma migrate dev`, Prisma requires a shadow database and needs `CREATE DATABASE` privileges. Use root credentials for local development.
 
@@ -122,7 +152,7 @@ DATABASE_URL="mysql://root:rootpassword@localhost:3306/mydb"
 
 > This only applies to `prisma migrate dev`. Production deployments use `prisma migrate deploy`, which does not require shadow database creation.
 
-### TypeORM — `synchronize: true` in Production
+#### TypeORM — `synchronize: true` in Production
 
 Never enable `synchronize: true` in production — it can drop or alter columns on startup. Always use migrations instead.
 
@@ -134,17 +164,17 @@ synchronize: true;
 synchronize: false;
 ```
 
-### Drizzle — Migration Folder
+#### Drizzle — Migration Folder
 
 Drizzle outputs SQL migrations to a `drizzle/` folder. Commit this folder to version control — it serves as your migration history.
 
-### Mongoose — No Migrations
+#### Mongoose — No Migrations
 
 MongoDB is schemaless; existing documents are not updated when your Mongoose schema changes. Handle data migrations manually.
 
 ---
 
-## Troubleshooting
+### Troubleshooting
 
 | Problem                          | Solution                                                |
 | -------------------------------- | ------------------------------------------------------- |
@@ -157,7 +187,7 @@ MongoDB is schemaless; existing documents are not updated when your Mongoose sch
 
 ---
 
-## excli Ecosystem
+### excli Ecosystem
 
 | Package                                                          | Description                       |
 | ---------------------------------------------------------------- | --------------------------------- |
@@ -175,16 +205,22 @@ Scaffolds a complete Express app with Docker, a running database, and a configur
 
 ---
 
-## Contributing
+### Contributing
 
-Bug reports, feature requests, and pull requests are welcome.
+Bug reports, feature requests, and pull requests are welcome. Please read the [Contributing Guide](CONTRIBUTING.md) before opening a PR.
 
 ---
 
-## License
+### License
 
-ISC — see [LICENSE](./LICENSE) for details.
+ISC License — see [LICENSE](./LICENSE) for details.
 
-## Author
+### Author
 
-**Noman** · [pxycknomdictator@gmail.com](mailto:pxycknomdictator@gmail.com) · [@pxycknomdictator](https://github.com/pxycknomdictator)
+**Noman**  
+📧 [pxycknomdictator@gmail.com](mailto:pxycknomdictator@gmail.com)  
+🐙 [@pxycknomdictator](https://github.com/pxycknomdictator)
+
+---
+
+**Happy coding! Built with ❤️ for developers who value productivity.**
