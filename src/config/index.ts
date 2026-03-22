@@ -282,7 +282,7 @@ export function getPrismaPackages(
         },
         sqlite: {
             packages: ["@prisma/client", "@prisma/adapter-better-sqlite3"],
-            devPackages: ["prisma", "@types/better-sqlite3"],
+            devPackages: ["prisma"],
         },
         mongodb: {
             packages: ["@prisma/client@6.19"],
@@ -298,8 +298,14 @@ export function getPrismaPackages(
 
     config.packages.push("dotenv");
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
-    if (normalizedDb === "postgres" && isTs)
+
+    if (normalizedDb === "postgres" && isTs) {
         config.devPackages.push("@types/pg");
+    }
+
+    if (normalizedDb === "sqlite" && isTs) {
+        config.devPackages.push("@types/better-sqlite3");
+    }
 
     return config;
 }
