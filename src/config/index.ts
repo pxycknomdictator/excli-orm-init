@@ -223,7 +223,7 @@ export function getTypeOrmPackages(
         },
         sqlite: {
             packages: ["typeorm", "better-sqlite3", "reflect-metadata"],
-            devPackages: ["@types/better-sqlite3"],
+            devPackages: [],
         },
         mongodb: {
             packages: ["typeorm", "mongodb", "reflect-metadata"],
@@ -232,12 +232,18 @@ export function getTypeOrmPackages(
     };
 
     const normalizedDb =
-        db !== "mariadb" ? (db as "mysql" | "postgres" | "mongodb") : "mysql";
+        db !== "mariadb"
+            ? (db as "mysql" | "sqlite" | "postgres" | "mongodb")
+            : "mysql";
     const config = base[normalizedDb];
 
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (normalizedDb === "postgres" && isTs) {
         config.devPackages.push("@types/pg");
+    }
+
+    if (normalizedDb === "sqlite" && isTs) {
+        config.devPackages.push("@types/better-sqlite3");
     }
 
     return config;
