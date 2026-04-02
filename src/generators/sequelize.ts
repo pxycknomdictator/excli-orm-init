@@ -1,6 +1,6 @@
-import { concatFileExtension, generateFile } from "src/utils";
-import { dbLocation, schemasLocation, sequelizeDialectMap } from "src/config";
-import type { GenerateFileArgs, ProjectConfig, SQL_DATABASE } from "src/types";
+import { concatFileExtension, generateFile } from "../utils";
+import { dbLocation, schemasLocation, sequelizeDialectMap } from "../config";
+import type { GenerateFileArgs, ProjectConfig, SQL_DATABASE } from "../types";
 
 export async function setupSequelize(config: ProjectConfig) {
     const { language } = config;

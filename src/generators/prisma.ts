@@ -1,11 +1,11 @@
-import { dbLocation, prismaDialectMap, prismaSchemaLocation } from "src/config";
+import { dbLocation, prismaDialectMap, prismaSchemaLocation } from "../config";
 import {
     appendExistsFile,
     concatFileExtension,
     fireShell,
     generateFile,
-} from "src/utils";
-import type { ProjectConfig, GenerateFileArgs } from "src/types";
+} from "../utils";
+import type { ProjectConfig, GenerateFileArgs } from "../types";
 
 const prismaConnectionDatabasesList: Record<
     ProjectConfig["database"],

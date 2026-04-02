@@ -1,4 +1,4 @@
-import { getInteractiveInputs } from "src/core";
+import { getInteractiveInputs } from "../core";
 import { getYargsInputs } from "./yargs";
 
 export async function getUserInputs() {

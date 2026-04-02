@@ -4,15 +4,15 @@ import {
     promptDatabaseOrm,
     promptLanguage,
     promptPkgManager,
-} from "src/cli";
-import { ormsList, tsConfigFileLocation } from "src/config";
-import { fireShell, generateFile, isFileExists } from "src/utils";
-import { modifyPackageJson, tsConfig } from "src/managers";
+} from "../cli";
+import { ormsList, tsConfigFileLocation } from "../config";
+import { fireShell, generateFile, isFileExists } from "../utils";
+import { modifyPackageJson, tsConfig } from "../managers";
 import { initializeNodeProject, installPackagesWithManager } from "./installer";
-import type { ProjectConfig } from "src/types";
+import type { ProjectConfig } from "../types";
 
 export async function getInteractiveInputs(): Promise<ProjectConfig> {
-    const { displayBanner } = await import("src/cli");
+    const { displayBanner } = await import("../cli");
 
     console.clear();
     displayBanner();

@@ -3,14 +3,14 @@ import {
     drizzleDialectMap,
     drizzleConfigLocation,
     schemasLocation,
-} from "src/config";
-import { concatFileExtension, generateFile } from "src/utils";
+} from "../config";
+import { concatFileExtension, generateFile } from "../utils";
 import type {
     GenerateFileArgs,
     Language,
     ProjectConfig,
     SQL_DATABASE,
-} from "src/types";
+} from "../types";
 
 const drizzleSchemasList = {
     mysql: drizzleMysqlMariadbSchema,

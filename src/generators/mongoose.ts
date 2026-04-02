@@ -1,6 +1,6 @@
-import { dbLocation, schemasLocation } from "src/config";
-import { concatFileExtension, generateFile } from "src/utils";
-import type { GenerateFileArgs, ProjectConfig } from "src/types";
+import { dbLocation, schemasLocation } from "../config";
+import { concatFileExtension, generateFile } from "../utils";
+import type { GenerateFileArgs, ProjectConfig } from "../types";
 
 export async function setupMongoose(config: ProjectConfig) {
     const { language } = config;

@@ -5,14 +5,14 @@ import {
     setupSequelize,
     setupTypeOrm,
     setupPrisma,
-} from "src/generators";
+} from "../generators";
 import type {
     PackageConfig,
     ProjectConfig,
     ScriptConfig,
     SQL_DATABASE,
     INTERACTIVE_PROMPTS,
-} from "src/types";
+} from "../types";
 
 const rootDir = process.cwd();
 

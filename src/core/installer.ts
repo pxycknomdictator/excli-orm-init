@@ -2,9 +2,9 @@ import {
     installCmdMap,
     ormsPackagesList,
     packageJsonLocation,
-} from "src/config";
-import type { ProjectConfig } from "src/types";
-import { fireShell, isFileExists } from "src/utils";
+} from "../config";
+import type { ProjectConfig } from "../types";
+import { fireShell, isFileExists } from "../utils";
 
 export async function initializeNodeProject(targetDir: string) {
     const isExists = isFileExists(packageJsonLocation);
