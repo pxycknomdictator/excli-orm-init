@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import type { ProjectConfig } from "src/types";
+import type { ProjectConfig } from "../types";
 
 export function getYargsInputs(): ProjectConfig {
     const argv = yargs(hideBin(process.argv))

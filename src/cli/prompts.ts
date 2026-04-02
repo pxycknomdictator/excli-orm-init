@@ -1,5 +1,5 @@
 import { isCancel, select } from "@clack/prompts";
-import { terminate } from "src/utils";
+import { terminate } from "../utils";
 import {
     database_types,
     languages,
@@ -9,8 +9,8 @@ import {
     sql_database,
     sql_orms,
     generateOptions,
-} from "src/config";
-import type { DATABASE_TYPE, ProjectConfig } from "src/types";
+} from "../config";
+import type { DATABASE_TYPE, ProjectConfig } from "../types";
 
 export async function promptDatabaseType(): Promise<
     ProjectConfig["databaseType"]

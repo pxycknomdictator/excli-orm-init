@@ -1,6 +1,6 @@
-import { dbLocation, schemasLocation } from "src/config";
-import type { GenerateFileArgs, Language, ProjectConfig } from "src/types";
-import { concatFileExtension, generateFile } from "src/utils";
+import { dbLocation, schemasLocation } from "../config";
+import type { GenerateFileArgs, Language, ProjectConfig } from "../types";
+import { concatFileExtension, generateFile } from "../utils";
 
 const schemaMap: Record<string, () => string> = {
     sql_ts: typeOrmSqlTsSchema,

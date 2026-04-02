@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import { cancel } from "@clack/prompts";
-import type { GenerateFileArgs, Language } from "src/types";
+import type { GenerateFileArgs, Language } from "../types";
 
 export async function generateFile(fileArgs: GenerateFileArgs) {
     const { fileLocation, fileContent } = fileArgs;

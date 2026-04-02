@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { drizzleScripts, packageJsonLocation, prismaScripts } from "src/config";
-import type { ProjectConfig } from "src/types";
+import { drizzleScripts, packageJsonLocation, prismaScripts } from "../config";
+import type { ProjectConfig } from "../types";
 
 export async function modifyPackageJson(config: ProjectConfig) {
     const pkg = JSON.parse(
