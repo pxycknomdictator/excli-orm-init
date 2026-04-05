@@ -40,9 +40,7 @@ export async function setupPrisma(config: ProjectConfig) {
         },
     ];
 
-    await Promise.all(
-        prisma.map(async (config) => await generateFile({ ...config })),
-    );
+    await Promise.all(prisma.map((config) => generateFile({ ...config })));
 }
 
 function prismaSqlSchema() {

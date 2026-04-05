@@ -16,9 +16,7 @@ export async function setupSequelize(config: ProjectConfig) {
         { fileLocation: dbPath!, fileContent: sequelizeConnection(config) },
     ];
 
-    await Promise.all(
-        sequelize.map(async (config) => await generateFile({ ...config })),
-    );
+    await Promise.all(sequelize.map((config) => generateFile({ ...config })));
 }
 
 function sequelizeSchema() {

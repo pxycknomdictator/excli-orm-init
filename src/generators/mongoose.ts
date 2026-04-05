@@ -16,9 +16,7 @@ export async function setupMongoose(config: ProjectConfig) {
         { fileLocation: schemasPath!, fileContent: mongooseSchema() },
     ];
 
-    await Promise.all(
-        mongoose.map(async (config) => await generateFile({ ...config })),
-    );
+    await Promise.all(mongoose.map((config) => generateFile({ ...config })));
 }
 
 function mongooseConnection(config: ProjectConfig) {

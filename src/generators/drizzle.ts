@@ -53,9 +53,7 @@ export async function setupDrizzle(config: ProjectConfig) {
         { fileLocation: schemasPath!, fileContent: drizzleSchema() },
     ];
 
-    await Promise.all(
-        drizzle.map(async (config) => await generateFile({ ...config })),
-    );
+    await Promise.all(drizzle.map((config) => generateFile({ ...config })));
 }
 
 function drizzleConfigContent(db: SQL_DATABASE, lang: Language) {

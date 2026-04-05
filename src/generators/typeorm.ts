@@ -32,9 +32,7 @@ export async function setupTypeOrm(config: ProjectConfig) {
         },
     ];
 
-    await Promise.all(
-        typeorm.map(async (config) => await generateFile({ ...config })),
-    );
+    await Promise.all(typeorm.map((config) => generateFile({ ...config })));
 }
 
 function typeOrmSqlTsSchema() {
