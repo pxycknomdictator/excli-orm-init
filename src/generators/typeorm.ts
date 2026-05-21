@@ -1,5 +1,5 @@
 import { dbLocation, schemasLocation } from "../config";
-import type { GenerateFileArgs, Language, ProjectConfig } from "../types";
+import type { GenerateFileArgs, ProjectConfig } from "../types";
 import { concatFileExtension, generateFile } from "../utils";
 
 const schemaMap: Record<string, () => string> = {
@@ -28,7 +28,7 @@ export async function setupTypeOrm(config: ProjectConfig) {
         { fileLocation: schemasPath!, fileContent: typeOrmSchema() },
         {
             fileLocation: dbPath!,
-            fileContent: typeOrmConnection(database, language),
+            fileContent: typeOrmConnection(database),
         },
     ];
 
@@ -190,7 +190,7 @@ export const User = new EntitySchema({
 `;
 }
 
-function typeOrmConnection(db: ProjectConfig["database"], lang: Language) {
+function typeOrmConnection(db: ProjectConfig["database"]) {
     const connection = db !== "sqlite" ? "url" : "database";
     const dialectType = db !== "sqlite" ? db : "better-sqlite3";
 
@@ -198,9 +198,11 @@ function typeOrmConnection(db: ProjectConfig["database"], lang: Language) {
 import { DataSource } from "typeorm";
 import { User } from "./models/schemas.js";
 
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+
 export const AppDataSource = new DataSource({
     type: "${dialectType}",
-    ${connection}: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
+    ${connection}: process.env.DATABASE_URL,
     synchronize: true,
     entities: [User],
 });

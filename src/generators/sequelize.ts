@@ -58,22 +58,24 @@ export const User = sequelize.define(
 }
 
 function sequelizeConnection(config: ProjectConfig) {
-    const { language, database } = config;
+    const { database } = config;
     const db = sequelizeDialectMap[database as SQL_DATABASE] as SQL_DATABASE;
     const isSQLite = database === "sqlite";
 
     const sequelizeInit = isSQLite
         ? `new Sequelize({
     dialect: "sqlite",
-    storage: process.env.DATABASE_URL${language === "ts" ? "!" : ""},
+    storage: process.env.DATABASE_URL,
     logging: false,
 })`
-        : `new Sequelize(process.env.DATABASE_URL${language === "ts" ? "!" : ""}, {
+        : `new Sequelize(process.env.DATABASE_URL, {
     dialect: "${db}",
     logging: false,
 })`;
 
     return `import { Sequelize } from "sequelize";
+
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
 
 export const sequelize = ${sequelizeInit};
 
