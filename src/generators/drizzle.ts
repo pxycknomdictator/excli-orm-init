@@ -48,7 +48,7 @@ export async function setupDrizzle(config: ProjectConfig) {
         },
         {
             fileLocation: dbPath!,
-            fileContent: drizzleConnection(database as SQL_DATABASE, language),
+            fileContent: drizzleConnection(database as SQL_DATABASE),
         },
         { fileLocation: schemasPath!, fileContent: drizzleSchema() },
     ];
@@ -140,11 +140,14 @@ export const usersTable = sqliteTable("users", {
 `;
 }
 
-function drizzleConnection(db: SQL_DATABASE, lang: Language) {
+function drizzleConnection(db: SQL_DATABASE) {
     const module = drizzleImportsMap[db];
 
     return `import { drizzle } from "drizzle-orm/${module}";
+import * as schemas from "./models/schemas.js";
 
-export const db = drizzle(process.env.DATABASE_URL${lang === "ts" ? "!" : ""});
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+
+export const db = drizzle(process.env.DATABASE_URL, { schema: schemas });
 `;
 }
