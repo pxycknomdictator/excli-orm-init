@@ -12,21 +12,26 @@ export async function setupMongoose(config: ProjectConfig) {
     );
 
     const mongoose: GenerateFileArgs[] = [
-        { fileLocation: dbPath!, fileContent: mongooseConnection(config) },
+        { fileLocation: dbPath!, fileContent: mongooseConnection() },
         { fileLocation: schemasPath!, fileContent: mongooseSchema() },
     ];
 
     await Promise.all(mongoose.map((config) => generateFile({ ...config })));
 }
 
-function mongooseConnection(config: ProjectConfig) {
-    const { language } = config;
-
+function mongooseConnection() {
     return `import mongoose from "mongoose";
 
 export async function database() {
+    if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+
+    if (mongoose.connection.readyState === 1) {
+        console.log("Reuse Database connection!");
+        return;
+    }
+
     try {
-        await mongoose.connect(process.env.DATABASE_URL${language === "ts" ? "!" : ""});
+        await mongoose.connect(process.env.DATABASE_URL);
         console.log("Database is connected!");
     } catch (error) {
         throw new Error("failed to connect with database: ", { cause: error });
