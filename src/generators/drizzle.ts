@@ -142,12 +142,14 @@ export const usersTable = sqliteTable("users", {
 
 function drizzleConnection(db: SQL_DATABASE) {
     const module = drizzleImportsMap[db];
+    const modeConfig =
+        db !== "postgres" && db !== "sqlite" ? `mode: "default"` : "";
 
     return `import { drizzle } from "drizzle-orm/${module}";
 import * as schemas from "./models/schemas.js";
 
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
 
-export const db = drizzle(process.env.DATABASE_URL, { schema: schemas });
+export const db = drizzle(process.env.DATABASE_URL, { schema: schemas, ${modeConfig} });
 `;
 }
