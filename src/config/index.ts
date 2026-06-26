@@ -70,6 +70,7 @@ export const no_sql_orms: INTERACTIVE_PROMPTS[] = [
     { label: "Prisma", emoji: "📐", value: "prisma" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Mongoose", emoji: "🦦", value: "mongoose" },
+    { label: "Native Driver", emoji: "🌱", value: "native_driver" },
 ];
 
 export const languages: INTERACTIVE_PROMPTS[] = [
