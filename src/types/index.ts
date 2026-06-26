@@ -4,7 +4,7 @@ export type SQL_DATABASE = "mysql" | "mariadb" | "postgres" | "sqlite";
 export type SQL_ORMS = "prisma" | "drizzle" | "typeorm" | "sequelize";
 
 export type NO_SQL_DATABASE = "mongodb";
-export type NO_SQL_ORMS = "prisma" | "typeorm" | "mongoose";
+export type NO_SQL_ORMS = "prisma" | "typeorm" | "mongoose" | "native_driver";
 
 export type INTERACTIVE_PROMPTS = {
     label: string;

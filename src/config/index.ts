@@ -5,6 +5,7 @@ import {
     setupSequelize,
     setupTypeOrm,
     setupPrisma,
+    setupMongodbNativeDriver,
 } from "../generators";
 import type {
     PackageConfig,
@@ -151,6 +152,7 @@ export const ormsList = {
     prisma: setupPrisma,
     sequelize: setupSequelize,
     typeorm: setupTypeOrm,
+    native_driver: setupMongodbNativeDriver,
 };
 
 export function getDrizzlePackages(
@@ -264,6 +266,21 @@ export function getMongoosePackages(
     return config;
 }
 
+export function getMongoNativeDriverPackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<"mongodb", PackageConfig> = {
+        mongodb: { packages: ["mongodb"], devPackages: [] },
+    };
+
+    const config = base[db as "mongodb"];
+
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
+
+    return config;
+}
+
 export function getPrismaPackages(
     db: ProjectConfig["database"],
     isTs: boolean,
@@ -310,7 +327,13 @@ export function getPrismaPackages(
     return config;
 }
 
-type ORMs = "drizzle" | "prisma" | "typeorm" | "sequelize" | "mongoose";
+type ORMs =
+    | "drizzle"
+    | "prisma"
+    | "typeorm"
+    | "sequelize"
+    | "mongoose"
+    | "native_driver";
 
 type ORMFn = (db: ProjectConfig["database"], isTs: boolean) => PackageConfig;
 
@@ -320,6 +343,7 @@ export const ormsPackagesList: Record<ORMs, ORMFn> = {
     typeorm: getTypeOrmPackages,
     sequelize: getSequelizePackages,
     mongoose: getMongoosePackages,
+    native_driver: getMongoNativeDriverPackages,
 };
 
 export function generateOptions(options: INTERACTIVE_PROMPTS[]) {
