@@ -43,30 +43,71 @@ export function getYargsInputs(): ProjectConfig {
             type: "boolean",
             description:
                 "Use Prisma (MySQL, MariaDB, PostgreSQL, MongoDB, SQLite)",
-            conflicts: ["drizzle", "typeorm", "sequelize", "mongoose"],
+            conflicts: [
+                "drizzle",
+                "typeorm",
+                "sequelize",
+                "mongoose",
+                "native-driver",
+            ],
         })
         .option("drizzle", {
             type: "boolean",
             description:
                 "Use Drizzle (MySQL, MariaDB, PostgreSQL, SQLite only)",
-            conflicts: ["prisma", "typeorm", "sequelize", "mongoose"],
+            conflicts: [
+                "prisma",
+                "typeorm",
+                "sequelize",
+                "mongoose",
+                "native-driver",
+            ],
         })
         .option("typeorm", {
             type: "boolean",
             description:
                 "Use TypeORM (MySQL, MariaDB, PostgreSQL, MongoDB, SQLite)",
-            conflicts: ["prisma", "drizzle", "sequelize", "mongoose"],
+            conflicts: [
+                "prisma",
+                "drizzle",
+                "sequelize",
+                "mongoose",
+                "native-driver",
+            ],
         })
         .option("sequelize", {
             type: "boolean",
             description:
                 "Use Sequelize (MySQL, MariaDB, PostgreSQL, SQLite only)",
-            conflicts: ["prisma", "drizzle", "typeorm", "mongoose"],
+            conflicts: [
+                "prisma",
+                "drizzle",
+                "typeorm",
+                "mongoose",
+                "native-driver",
+            ],
         })
         .option("mongoose", {
             type: "boolean",
             description: "Use Mongoose (MongoDB only)",
-            conflicts: ["prisma", "drizzle", "typeorm", "sequelize"],
+            conflicts: [
+                "prisma",
+                "drizzle",
+                "typeorm",
+                "sequelize",
+                "native-driver",
+            ],
+        })
+        .option("native-driver", {
+            type: "boolean",
+            description: "Use Native Node.js Drivers (MongoDB only)",
+            conflicts: [
+                "prisma",
+                "drizzle",
+                "typeorm",
+                "sequelize",
+                "mongoose",
+            ],
         })
         .option("npm", {
             type: "boolean",
@@ -108,10 +149,11 @@ export function getYargsInputs(): ProjectConfig {
                 !argv.drizzle &&
                 !argv.typeorm &&
                 !argv.sequelize &&
-                !argv.mongoose
+                !argv.mongoose &&
+                !argv["native-driver"]
             )
                 throw new Error(
-                    "You must specify an ORM: --prisma, --drizzle, --typeorm, --sequelize, or --mongoose",
+                    "You must specify an ORM or Driver: --prisma, --drizzle, --typeorm, --sequelize, --mongoose, or --native-driver",
                 );
 
             const isSql =
@@ -120,17 +162,22 @@ export function getYargsInputs(): ProjectConfig {
 
             if (isNoSql && argv.drizzle)
                 throw new Error(
-                    "Drizzle does not support MongoDB. Use --prisma, --typeorm, or --mongoose",
+                    "Drizzle does not support MongoDB. Use --prisma, --typeorm, --mongoose, or --native-driver",
                 );
 
             if (isNoSql && argv.sequelize)
                 throw new Error(
-                    "Sequelize does not support MongoDB. Use --prisma, --typeorm, or --mongoose",
+                    "Sequelize does not support MongoDB. Use --prisma, --typeorm, --mongoose, or --native-driver",
                 );
 
             if (isSql && argv.mongoose)
                 throw new Error(
                     "Mongoose only supports MongoDB. Use --prisma, --drizzle, --typeorm, or --sequelize",
+                );
+
+            if (isSql && argv["native-driver"])
+                throw new Error(
+                    "Native Driver configuration in this tool is only for MongoDB. Use --prisma, --drizzle, --typeorm, or --sequelize",
                 );
 
             if (!argv.npm && !argv.yarn && !argv.pnpm && !argv.bun)
@@ -175,7 +222,8 @@ export function getYargsInputs(): ProjectConfig {
     else if (argv.typeorm) databaseOrm = "typeorm";
     else if (argv.sequelize) databaseOrm = "sequelize";
     else if (argv.mongoose) databaseOrm = "mongoose";
-    else throw new Error("Invalid ORM");
+    else if (argv["native-driver"]) databaseOrm = "native_driver";
+    else throw new Error("Invalid ORM/Driver");
 
     let pkgManager: ProjectConfig["pkgManager"];
     if (argv.npm) pkgManager = "npm";
