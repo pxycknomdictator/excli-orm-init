@@ -1,19 +1,35 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { promisify } from "node:util";
+import { dirname } from "node:path";
+import { execFile } from "node:child_process";
 import { drizzleScripts, packageJsonLocation, prismaScripts } from "../config";
 import type { ProjectConfig } from "../types";
 
-export async function modifyPackageJson(config: ProjectConfig) {
-    const pkg = JSON.parse(
-        await readFile(packageJsonLocation, { encoding: "utf-8" }),
-    );
+export async function modifyPackageJson({
+    language,
+    databaseOrm,
+}: ProjectConfig) {
+    const execFileAsync = promisify(execFile);
+    const targetDir = dirname(packageJsonLocation);
 
-    pkg.main = `src/main.${config.language}`;
-    pkg.type = "module";
-    pkg.scripts = {
-        ...pkg.scripts,
-        ...(config.databaseOrm === "drizzle" ? drizzleScripts : {}),
-        ...(config.databaseOrm === "prisma" ? prismaScripts : {}),
-    };
+    const args = [
+        "pkg",
+        "set",
+        `main=src/main.${language}`,
+        `type=module`,
+        `--prefix=${targetDir}`,
+    ];
 
-    await writeFile(packageJsonLocation, JSON.stringify(pkg, null, 2));
+    const ormScripts =
+        databaseOrm === "drizzle"
+            ? drizzleScripts
+            : databaseOrm === "prisma"
+              ? prismaScripts
+              : {};
+
+    for (const [key, value] of Object.entries(ormScripts)) {
+        args.push(`scripts.${key}=${value}`);
+    }
+
+    if (args.length > 3) await execFileAsync("npm", args);
+    else await execFileAsync("npm", args);
 }
