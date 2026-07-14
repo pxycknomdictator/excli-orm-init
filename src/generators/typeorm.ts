@@ -80,8 +80,8 @@ function typeOrmNoSqlTsSchema() {
     CreateDateColumn,
     UpdateDateColumn,
     Index,
-    ObjectId,
 } from "typeorm";
+import type { ObjectId } from "mongodb";
 
 @Entity({ name: "users" })
 export class User {
