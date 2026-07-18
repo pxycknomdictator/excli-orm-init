@@ -196,7 +196,7 @@ function typeOrmConnection(db: ProjectConfig["database"]) {
 
     return `import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "./models/schemas.js";
+import { User } from "./schemas.js";
 
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
 

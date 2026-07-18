@@ -31,13 +31,7 @@ export const tsConfigFileLocation = join(rootDir, tsConfigFile);
 export const drizzleConfigLocation = join(rootDir, drizzleConfigFile);
 export const prismaSchemaLocation = join(rootDir, "prisma", prismaSchemaFile);
 export const dbLocation = join(rootDir, "src", "db", dbFile);
-export const schemasLocation = join(
-    rootDir,
-    "src",
-    "db",
-    "models",
-    schemasFile,
-);
+export const schemasLocation = join(rootDir, "src", "db", schemasFile);
 
 export const packageJsonLocation = join(rootDir, packageJson);
 

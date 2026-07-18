@@ -63,11 +63,13 @@ function drizzleConfigContent(db: SQL_DATABASE, lang: Language) {
 
 export default defineConfig({
     out: "./drizzle",
-    schema: "./src/db/models/schemas.${lang}",
+    schema: "./src/db/schemas.${lang}",
     dialect: "${dialect}",
     dbCredentials: {
         url: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
     },
+    verbose: true,
+    strict: true,
 });
 `;
 }
@@ -146,7 +148,7 @@ function drizzleConnection(db: SQL_DATABASE) {
         db !== "postgres" && db !== "sqlite" ? `mode: "default"` : "";
 
     return `import { drizzle } from "drizzle-orm/${module}";
-import * as schemas from "./models/schemas.js";
+import * as schemas from "./schemas.js";
 
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
 
