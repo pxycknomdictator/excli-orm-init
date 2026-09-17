@@ -147,6 +147,21 @@ function drizzleConnection(db: SQL_DATABASE) {
     const modeConfig =
         db !== "postgres" && db !== "sqlite" ? `mode: "default"` : "";
 
+    if (db === "postgres") {
+        return `import { drizzle } from "drizzle-orm/${module}";
+import { Pool } from "pg";
+import * as schemas from "./schemas.js";
+
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
+
+export const db = drizzle(pool, { schema: schemas });
+`;
+    }
+
     return `import { drizzle } from "drizzle-orm/${module}";
 import * as schemas from "./schemas.js";
 
