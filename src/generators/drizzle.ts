@@ -61,16 +61,18 @@ function drizzleConfigContent(db: SQL_DATABASE, lang: Language) {
 
     return `import { defineConfig } from "drizzle-kit";
 
-export default defineConfig({
-    out: "./drizzle",
-    schema: "./src/db/schemas.${lang}",
+const config = defineConfig({
+    strict: true,
+    verbose: true,
     dialect: "${dialect}",
+    out: "./src/db/drizzle/migrations",
+    schema: "./src/db/schemas.${lang}",
     dbCredentials: {
         url: process.env.DATABASE_URL${lang === "ts" ? "!" : ""},
     },
-    verbose: true,
-    strict: true,
 });
+
+export default config;
 `;
 }
 
