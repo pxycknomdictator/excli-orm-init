@@ -2,9 +2,9 @@ export const tsConfig = {
     compilerOptions: {
         rootDir: "./src",
         outDir: "./dist",
-        module: "nodenext",
-        moduleResolution: "nodenext",
-        target: "esnext",
+        module: "es2022",
+        moduleResolution: "bundler",
+        target: "es2022",
         esModuleInterop: true,
         types: ["node"],
         sourceMap: true,
@@ -15,6 +15,9 @@ export const tsConfig = {
         experimentalDecorators: true,
         emitDecoratorMetadata: true,
         strictPropertyInitialization: false,
+        paths: {
+            "@/*": ["./src/*"],
+        },
     },
     include: ["src/**/*"],
     exclude: ["node_modules", "dist"],
