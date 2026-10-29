@@ -26,10 +26,6 @@ export type NO_SQL_DB_CONFIG = {
     orms: NO_SQL_ORMS;
 };
 
-export type ScriptConfig = {
-    [key: string]: string;
-};
-
 export type ProjectConfig = {
     databaseType: DATABASE_TYPE;
     database: SQL_DATABASE | NO_SQL_DATABASE;

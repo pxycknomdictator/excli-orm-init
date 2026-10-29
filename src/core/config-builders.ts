@@ -7,7 +7,7 @@ import {
 } from "../cli";
 import { ormsList, tsConfigFileLocation } from "../config";
 import { fireShell, generateFile, isFileExists } from "../utils";
-import { modifyPackageJson, tsConfig } from "../managers";
+import { tsConfig } from "../managers";
 import { initializeNodeProject, installPackagesWithManager } from "./installer";
 import type { ProjectConfig } from "../types";
 
@@ -30,7 +30,6 @@ export async function prepareProject(config: ProjectConfig, targetDir: string) {
     const setupOrm = ormsList[config.databaseOrm];
 
     await initializeNodeProject(targetDir);
-    await modifyPackageJson(config);
     await installPackagesWithManager(config, targetDir);
     await setupOrm(config);
 

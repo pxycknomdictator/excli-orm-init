@@ -10,7 +10,6 @@ import {
 import type {
     PackageConfig,
     ProjectConfig,
-    ScriptConfig,
     SQL_DATABASE,
     INTERACTIVE_PROMPTS,
 } from "../types";
@@ -78,24 +77,6 @@ export const pkg_managers: INTERACTIVE_PROMPTS[] = [
     { label: "pnpm", emoji: "🚀", value: "pnpm" },
     { label: "bun", emoji: "🥟", value: "bun" },
 ];
-
-export const drizzleScripts: ScriptConfig = {
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-};
-
-export const prismaScripts: ScriptConfig = {
-    "db:generate": "prisma generate",
-    "db:dev": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy",
-    "db:reset": "prisma migrate reset",
-    "db:push": "prisma db push",
-    "db:status": "prisma migrate status",
-    "db:studio": "prisma studio",
-    "db:format": "prisma format",
-};
 
 export const drizzleDialectMap: Record<
     Extract<SQL_DATABASE, "mysql" | "postgres" | "sqlite">,

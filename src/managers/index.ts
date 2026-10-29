@@ -1,2 +1,24 @@
-export * from "./package-manager";
-export * from "./tsconfig";
+export const tsConfig = {
+    compilerOptions: {
+        rootDir: "./src",
+        outDir: "./dist",
+        module: "es2022",
+        moduleResolution: "bundler",
+        target: "es2022",
+        esModuleInterop: true,
+        types: ["node"],
+        sourceMap: true,
+        declaration: true,
+        declarationMap: true,
+        strict: true,
+        skipLibCheck: true,
+        experimentalDecorators: true,
+        emitDecoratorMetadata: true,
+        strictPropertyInitialization: false,
+        paths: {
+            "@/*": ["./src/*"],
+        },
+    },
+    include: ["src/**/*"],
+    exclude: ["node_modules", "dist"],
+};
