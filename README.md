@@ -111,11 +111,12 @@ Existing documents are not updated when your schema changes, so handle data migr
 
 ## Troubleshooting
 
-| Problem                          | Solution                                              |
-| -------------------------------- | ----------------------------------------------------- |
-| Incompatible ORM + database      | Check the [compatibility table](#compatibility)       |
-| TypeORM decorators failing in JS | Use TypeScript, since JS decorator support is limited |
-| Connection refused               | Make sure your database is running                    |
+| Problem                          | Solution                                                   |
+| -------------------------------- | ---------------------------------------------------------- |
+| Incompatible ORM + database      | Check the [compatibility table](#compatibility)            |
+| pnpm exits during approval       | The CLI automatically allows all dependency build packages |
+| TypeORM decorators failing in JS | Use TypeScript, since JS decorator support is limited      |
+| Connection refused               | Make sure your database is running                         |
 
 ## Contributing
 

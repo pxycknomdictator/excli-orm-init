@@ -99,7 +99,7 @@ export const sequelizeDialectMap: Record<SQL_DATABASE, string> = {
 
 export const installCmdMap: Record<string, string> = {
     npm: "install",
-    pnpm: "add",
+    pnpm: "add --ignore-workspace --config.dangerously-allow-all-builds=true",
     yarn: "add",
     bun: "add",
 };
