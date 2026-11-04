@@ -6,7 +6,7 @@ import {
     promptPkgManager,
 } from "../cli";
 import { ormsList, tsConfigFileLocation } from "../config";
-import { fireShell, generateFile, isFileExists } from "../utils";
+import { generateFile, isFileExists } from "../utils";
 import { tsConfig } from "../managers";
 import { initializeNodeProject, installPackagesWithManager } from "./installer";
 import type { ProjectConfig } from "../types";
@@ -41,6 +41,4 @@ export async function prepareProject(config: ProjectConfig, targetDir: string) {
             fileContent: JSON.stringify(tsConfig, null, 4),
         });
     }
-
-    await fireShell("npx prettier --write . --tab-width 4", targetDir);
 }
