@@ -4,7 +4,6 @@ import {
     setupMongoose,
     setupSequelize,
     setupTypeOrm,
-    setupPrisma,
     setupMongodbNativeDriver,
 } from "../generators";
 import type {
@@ -23,12 +22,10 @@ const drizzleConfigFile = "drizzle.config";
 const dbFile = "index";
 const schemasFile = "schemas";
 const packageJson = "package.json";
-const prismaSchemaFile = "schema.prisma";
 
 export const tsConfigFileLocation = join(rootDir, tsConfigFile);
 
 export const drizzleConfigLocation = join(rootDir, drizzleConfigFile);
-export const prismaSchemaLocation = join(rootDir, "prisma", prismaSchemaFile);
 export const dbLocation = join(rootDir, "src", "db", dbFile);
 export const schemasLocation = join(rootDir, "src", "db", schemasFile);
 
@@ -53,14 +50,12 @@ export const no_sql_database: INTERACTIVE_PROMPTS[] = [
 ];
 
 export const sql_orms: INTERACTIVE_PROMPTS[] = [
-    { label: "Prisma", emoji: "📐", value: "prisma" },
     { label: "Drizzle", emoji: "⚡", value: "drizzle" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Sequelize", emoji: "🐚", value: "sequelize" },
 ];
 
 export const no_sql_orms: INTERACTIVE_PROMPTS[] = [
-    { label: "Prisma", emoji: "📐", value: "prisma" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Mongoose", emoji: "🦦", value: "mongoose" },
     { label: "Native Driver", emoji: "🌱", value: "native_driver" },
@@ -95,19 +90,6 @@ export const typeOrmDbTypeMap: Record<ProjectConfig["database"], string> = {
     sqlite: "sqlite",
 };
 
-export const prismaDialectMap: Record<
-    Extract<
-        ProjectConfig["database"],
-        "mysql" | "postgres" | "mongodb" | "sqlite"
-    >,
-    string
-> = {
-    mysql: "mysql",
-    postgres: "postgresql",
-    mongodb: "mongodb",
-    sqlite: "sqlite",
-};
-
 export const sequelizeDialectMap: Record<SQL_DATABASE, string> = {
     mysql: "mysql",
     mariadb: "mariadb",
@@ -125,7 +107,6 @@ export const installCmdMap: Record<string, string> = {
 export const ormsList = {
     drizzle: setupDrizzle,
     mongoose: setupMongoose,
-    prisma: setupPrisma,
     sequelize: setupSequelize,
     typeorm: setupTypeOrm,
     native_driver: setupMongodbNativeDriver,
@@ -257,65 +238,12 @@ export function getMongoNativeDriverPackages(
     return config;
 }
 
-export function getPrismaPackages(
-    db: ProjectConfig["database"],
-    isTs: boolean,
-): PackageConfig {
-    const base: Record<
-        "mysql" | "postgres" | "mongodb" | "sqlite",
-        PackageConfig
-    > = {
-        mysql: {
-            packages: ["@prisma/client", "@prisma/adapter-mariadb"],
-            devPackages: ["prisma"],
-        },
-        postgres: {
-            packages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
-            devPackages: ["prisma"],
-        },
-        sqlite: {
-            packages: ["@prisma/client", "@prisma/adapter-better-sqlite3"],
-            devPackages: ["prisma"],
-        },
-        mongodb: {
-            packages: ["@prisma/client@6.19"],
-            devPackages: ["prisma@6.19"],
-        },
-    };
-
-    const normalizedDb =
-        db !== "mariadb"
-            ? (db as "mysql" | "postgres" | "mongodb" | "sqlite")
-            : "mysql";
-    const config = base[normalizedDb];
-
-    config.packages.push("dotenv");
-    if (isTs) config.devPackages.push(...TypescriptDevPackages);
-
-    if (normalizedDb === "postgres" && isTs) {
-        config.devPackages.push("@types/pg");
-    }
-
-    if (normalizedDb === "sqlite" && isTs) {
-        config.devPackages.push("@types/better-sqlite3");
-    }
-
-    return config;
-}
-
-type ORMs =
-    | "drizzle"
-    | "prisma"
-    | "typeorm"
-    | "sequelize"
-    | "mongoose"
-    | "native_driver";
+type ORMs = "drizzle" | "typeorm" | "sequelize" | "mongoose" | "native_driver";
 
 type ORMFn = (db: ProjectConfig["database"], isTs: boolean) => PackageConfig;
 
 export const ormsPackagesList: Record<ORMs, ORMFn> = {
     drizzle: getDrizzlePackages,
-    prisma: getPrismaPackages,
     typeorm: getTypeOrmPackages,
     sequelize: getSequelizePackages,
     mongoose: getMongoosePackages,

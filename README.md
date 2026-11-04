@@ -11,7 +11,7 @@ A CLI tool for setting up popular SQL and NoSQL ORMs/ODMs in Node.js projects, w
 
 - SQL: MySQL, MariaDB, PostgreSQL, SQLite
 - NoSQL: MongoDB
-- ORMs/ODMs: Prisma, Sequelize, TypeORM, Drizzle, Mongoose, and the native MongoDB driver
+- ORMs/ODMs: Sequelize, TypeORM, Drizzle, Mongoose, and the native MongoDB driver
 - TypeScript and JavaScript support
 - Works with npm, yarn, pnpm, and bun
 - Interactive or flag-based setup
@@ -34,7 +34,7 @@ You'll be asked for your language, database, ORM/ODM, and package manager.
 ### Flag mode
 
 ```bash
-npx @excli/orm-init --ts --pnpm --postgres --prisma
+npx @excli/orm-init --ts --pnpm --postgres --drizzle
 ```
 
 ### Global install
@@ -46,19 +46,16 @@ excli-orm-init
 
 ## Flags
 
-| Category        | Flags                                                                                |
-| --------------- | ------------------------------------------------------------------------------------ |
-| Language        | `--ts`, `--js`                                                                       |
-| Database        | `--mysql`, `--mariadb`, `--postgres`, `--sqlite`, `--mongodb`                        |
-| ORM/ODM         | `--prisma`, `--sequelize`, `--typeorm`, `--drizzle`, `--mongoose`, `--native-driver` |
-| Package manager | `--npm`, `--yarn`, `--pnpm`, `--bun`                                                 |
+| Category        | Flags                                                                    |
+| --------------- | ------------------------------------------------------------------------ |
+| Language        | `--ts`, `--js`                                                           |
+| Database        | `--mysql`, `--mariadb`, `--postgres`, `--sqlite`, `--mongodb`            |
+| ORM/ODM         | `--sequelize`, `--typeorm`, `--drizzle`, `--mongoose`, `--native-driver` |
+| Package manager | `--npm`, `--yarn`, `--pnpm`, `--bun`                                     |
 
 ### Examples
 
 ```bash
-# TypeScript + PostgreSQL + Prisma + pnpm
-npx @excli/orm-init --ts --pnpm --postgres --prisma
-
 # JavaScript + MongoDB + Mongoose + npm
 npx @excli/orm-init --js --npm --mongodb --mongoose
 
@@ -86,7 +83,6 @@ npx @excli/orm-init --ts --pnpm --mongodb --native-driver
 
 | ORM / ODM         | MySQL | MariaDB | PostgreSQL | SQLite | MongoDB |
 | ----------------- | :---: | :-----: | :--------: | :----: | :-----: |
-| **Prisma**        |  ✅   |   ✅    |     ✅     |   ✅   |   ✅    |
 | **Sequelize**     |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
 | **TypeORM**       |  ✅   |   ✅    |     ✅     |   ✅   |   ✅    |
 | **Drizzle**       |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
@@ -104,9 +100,6 @@ Use the `mariadb://` prefix, not `mysql://`. The wrong prefix makes Sequelize lo
 DATABASE_URL="mariadb://root:password@localhost:3306/mydb"
 ```
 
-**Prisma: shadow database error**
-`prisma migrate dev` needs a shadow database and therefore `CREATE DATABASE` privileges. Use root credentials for local development. This does not apply to `prisma migrate deploy` in production.
-
 **TypeORM: `synchronize: true`**
 Use it in development only, since it can drop or alter columns on startup. Set `synchronize: false` in production and use migrations.
 
@@ -120,10 +113,8 @@ Existing documents are not updated when your schema changes, so handle data migr
 
 | Problem                          | Solution                                              |
 | -------------------------------- | ----------------------------------------------------- |
-| Prisma shadow database error     | Use root credentials in `DATABASE_URL`                |
 | Incompatible ORM + database      | Check the [compatibility table](#compatibility)       |
 | TypeORM decorators failing in JS | Use TypeScript, since JS decorator support is limited |
-| Prisma Client not found          | Run `npx prisma generate` after setup                 |
 | Connection refused               | Make sure your database is running                    |
 
 ## Contributing

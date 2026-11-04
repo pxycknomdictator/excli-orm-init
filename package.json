@@ -20,7 +20,6 @@
         "orm-setup",
         "database",
         "database-setup",
-        "prisma",
         "sequelize",
         "typeorm",
         "nodejs",
