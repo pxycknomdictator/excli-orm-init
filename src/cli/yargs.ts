@@ -43,19 +43,48 @@ export function getYargsInputs(): ProjectConfig {
             type: "boolean",
             description:
                 "Use Drizzle (MySQL, MariaDB, PostgreSQL, SQLite only)",
-            conflicts: ["typeorm", "sequelize", "mongoose", "native-driver"],
+            conflicts: [
+                "typeorm",
+                "sequelize",
+                "mongoose",
+                "native-driver",
+                "kysely",
+            ],
         })
         .option("typeorm", {
             type: "boolean",
             description:
                 "Use TypeORM (MySQL, MariaDB, PostgreSQL, MongoDB, SQLite)",
-            conflicts: ["drizzle", "sequelize", "mongoose", "native-driver"],
+            conflicts: [
+                "drizzle",
+                "sequelize",
+                "mongoose",
+                "native-driver",
+                "kysely",
+            ],
         })
         .option("sequelize", {
             type: "boolean",
             description:
                 "Use Sequelize (MySQL, MariaDB, PostgreSQL, SQLite only)",
-            conflicts: ["drizzle", "typeorm", "mongoose", "native-driver"],
+            conflicts: [
+                "drizzle",
+                "typeorm",
+                "mongoose",
+                "native-driver",
+                "kysely",
+            ],
+        })
+        .option("kysely", {
+            type: "boolean",
+            description: "Use Kysely (MySQL, MariaDB, PostgreSQL, SQLite only)",
+            conflicts: [
+                "drizzle",
+                "typeorm",
+                "sequelize",
+                "mongoose",
+                "native-driver",
+            ],
         })
         .option("mongoose", {
             type: "boolean",
@@ -106,11 +135,12 @@ export function getYargsInputs(): ProjectConfig {
                 !argv.drizzle &&
                 !argv.typeorm &&
                 !argv.sequelize &&
+                !argv.kysely &&
                 !argv.mongoose &&
                 !argv["native-driver"]
             )
                 throw new Error(
-                    "You must specify an ORM or Driver: --drizzle, --typeorm, --sequelize, --mongoose, or --native-driver",
+                    "You must specify an ORM or Driver: --drizzle, --typeorm, --sequelize, --kysely, --mongoose, or --native-driver",
                 );
 
             const isSql =
@@ -127,14 +157,19 @@ export function getYargsInputs(): ProjectConfig {
                     "Sequelize does not support MongoDB. Use --typeorm, --mongoose, or --native-driver",
                 );
 
+            if (isNoSql && argv.kysely)
+                throw new Error(
+                    "Kysely does not support MongoDB. Use --typeorm, --mongoose, or --native-driver",
+                );
+
             if (isSql && argv.mongoose)
                 throw new Error(
-                    "Mongoose only supports MongoDB. Use --drizzle, --typeorm, or --sequelize",
+                    "Mongoose only supports MongoDB. Use --drizzle, --typeorm, --sequelize, or --kysely",
                 );
 
             if (isSql && argv["native-driver"])
                 throw new Error(
-                    "Native Driver configuration in this tool is only for MongoDB. Use --drizzle, --typeorm, or --sequelize",
+                    "Native Driver configuration in this tool is only for MongoDB. Use --drizzle, --typeorm, --sequelize, or --kysely",
                 );
 
             if (!argv.npm && !argv.yarn && !argv.pnpm && !argv.bun)
@@ -177,6 +212,7 @@ export function getYargsInputs(): ProjectConfig {
     if (argv.drizzle) databaseOrm = "drizzle";
     else if (argv.typeorm) databaseOrm = "typeorm";
     else if (argv.sequelize) databaseOrm = "sequelize";
+    else if (argv.kysely) databaseOrm = "kysely";
     else if (argv.mongoose) databaseOrm = "mongoose";
     else if (argv["native-driver"]) databaseOrm = "native_driver";
     else throw new Error("Invalid ORM/Driver");

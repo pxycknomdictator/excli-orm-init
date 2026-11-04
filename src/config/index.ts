@@ -54,6 +54,7 @@ export const sql_orms: INTERACTIVE_PROMPTS[] = [
     { label: "Drizzle", emoji: "⚡", value: "drizzle" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Sequelize", emoji: "🐚", value: "sequelize" },
+    { label: "Kysely", emoji: "🧩", value: "kysely" },
 ];
 
 export const no_sql_orms: INTERACTIVE_PROMPTS[] = [
