@@ -1,7 +1,7 @@
 export type DATABASE_TYPE = "sql" | "no_sql";
 
 export type SQL_DATABASE = "mysql" | "mariadb" | "postgres" | "sqlite";
-export type SQL_ORMS = "drizzle" | "typeorm" | "sequelize";
+export type SQL_ORMS = "drizzle" | "typeorm" | "sequelize" | "kysely";
 
 export type NO_SQL_DATABASE = "mongodb";
 export type NO_SQL_ORMS = "typeorm" | "mongoose" | "native_driver";

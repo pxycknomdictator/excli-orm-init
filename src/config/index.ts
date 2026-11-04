@@ -5,6 +5,7 @@ import {
     setupSequelize,
     setupTypeOrm,
     setupMongodbNativeDriver,
+    setupKysely,
 } from "../generators";
 import type {
     PackageConfig,
@@ -110,6 +111,7 @@ export const ormsList = {
     sequelize: setupSequelize,
     typeorm: setupTypeOrm,
     native_driver: setupMongodbNativeDriver,
+    kysely: setupKysely,
 };
 
 export function getDrizzlePackages(
@@ -238,7 +240,39 @@ export function getMongoNativeDriverPackages(
     return config;
 }
 
-type ORMs = "drizzle" | "typeorm" | "sequelize" | "mongoose" | "native_driver";
+export function getKyselyPackages(
+    db: ProjectConfig["database"],
+    isTs: boolean,
+): PackageConfig {
+    const base: Record<
+        "mysql" | "postgres" | "sqlite" | "mariadb",
+        PackageConfig
+    > = {
+        mysql: { packages: ["kysely", "mysql2"], devPackages: [] },
+        postgres: { packages: ["kysely", "pg"], devPackages: [] },
+        sqlite: { packages: ["kysely", "better-sqlite3"], devPackages: [] },
+        mariadb: {
+            packages: ["kysely", "mariadb", "kysely-mariadb"],
+            devPackages: [],
+        },
+    };
+
+    const config = base[db as "mysql" | "postgres" | "sqlite" | "mariadb"];
+    if (isTs) config.devPackages.push(...TypescriptDevPackages);
+    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
+    if (db === "sqlite" && isTs)
+        config.devPackages.push("@types/better-sqlite3");
+
+    return config;
+}
+
+type ORMs =
+    | "drizzle"
+    | "typeorm"
+    | "sequelize"
+    | "mongoose"
+    | "native_driver"
+    | "kysely";
 
 type ORMFn = (db: ProjectConfig["database"], isTs: boolean) => PackageConfig;
 
@@ -248,6 +282,7 @@ export const ormsPackagesList: Record<ORMs, ORMFn> = {
     sequelize: getSequelizePackages,
     mongoose: getMongoosePackages,
     native_driver: getMongoNativeDriverPackages,
+    kysely: getKyselyPackages,
 };
 
 export function generateOptions(options: INTERACTIVE_PROMPTS[]) {
