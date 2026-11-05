@@ -260,10 +260,7 @@ export function getKyselyPackages(
         mysql: { packages: ["kysely", "mysql2"], devPackages: [] },
         postgres: { packages: ["kysely", "pg"], devPackages: [] },
         sqlite: { packages: ["kysely", "better-sqlite3"], devPackages: [] },
-        mariadb: {
-            packages: ["kysely", "mariadb", "kysely-mariadb"],
-            devPackages: [],
-        },
+        mariadb: { packages: ["kysely", "mysql2"], devPackages: [] },
     };
 
     const config = base[db as "mysql" | "postgres" | "sqlite" | "mariadb"];

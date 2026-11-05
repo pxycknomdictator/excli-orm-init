@@ -53,7 +53,7 @@ excli-orm-init
 | Language        | `--ts`, `--js`                                                           |
 | Database        | `--mysql`, `--mariadb`, `--postgres`, `--sqlite`, `--mongodb`            |
 | ORM/ODM         | `--sequelize`, `--typeorm`, `--drizzle`, `--mongoose`, `--native-driver` |
-| Query builder   | `--kysely`                                                              |
+| Query builder   | `--kysely`                                                               |
 | Package manager | `--npm`, `--yarn`, `--pnpm`, `--bun`                                     |
 
 ### Examples
@@ -89,7 +89,7 @@ npx @excli/orm-init --ts --pnpm --mongodb --native-driver
 | **Sequelize**     |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
 | **TypeORM**       |  ✅   |   ✅    |     ✅     |   ✅   |   ✅    |
 | **Drizzle**       |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
-| **Kysely**       |  ✅   |   ✅   |     ✅     |   ✅   |   ❌    |
+| **Kysely**        |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
 | **Mongoose**      |  ❌   |   ❌    |     ❌     |   ❌   |   ✅    |
 | **Native driver** |  ❌   |   ❌    |     ❌     |   ❌   |   ✅    |
 
@@ -109,6 +109,10 @@ Use it in development only, since it can drop or alter columns on startup. Set `
 
 **Drizzle: migration folder**
 SQL migrations are written to `drizzle/`. Commit this folder, as it is your migration history.
+
+**Kysely: migration runner**
+Kysely migrations are generated under `src/db/migrations/`. Build the project and run
+the generated `src/db/migrate` file to apply them.
 
 **Mongoose: no migrations**
 Existing documents are not updated when your schema changes, so handle data migrations manually.
