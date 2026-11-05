@@ -1,7 +1,10 @@
 export type DATABASE_TYPE = "sql" | "no_sql";
+export type DATABASE_LIBRARY_CATEGORY = "orm" | "query_builder";
 
 export type SQL_DATABASE = "mysql" | "mariadb" | "postgres" | "sqlite";
-export type SQL_ORMS = "drizzle" | "typeorm" | "sequelize" | "kysely";
+export type SQL_ORMS = "drizzle" | "typeorm" | "sequelize";
+export type SQL_QUERY_BUILDERS = "kysely";
+export type SQL_LIBRARIES = SQL_ORMS | SQL_QUERY_BUILDERS;
 
 export type NO_SQL_DATABASE = "mongodb";
 export type NO_SQL_ORMS = "typeorm" | "mongoose" | "native_driver";
@@ -29,7 +32,7 @@ export type NO_SQL_DB_CONFIG = {
 export type ProjectConfig = {
     databaseType: DATABASE_TYPE;
     database: SQL_DATABASE | NO_SQL_DATABASE;
-    databaseOrm: SQL_ORMS | NO_SQL_ORMS;
+    databaseOrm: SQL_LIBRARIES | NO_SQL_ORMS;
     language: Language;
     pkgManager: PACKAGE_MANAGER;
 };

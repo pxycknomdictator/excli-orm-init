@@ -50,10 +50,18 @@ export const no_sql_database: INTERACTIVE_PROMPTS[] = [
     { label: "MongoDB", emoji: "🍃", value: "mongodb" },
 ];
 
+export const sql_library_categories: INTERACTIVE_PROMPTS[] = [
+    { label: "ORM / ODM", emoji: "🏗️", value: "orm" },
+    { label: "Query Builder", emoji: "🧱", value: "query_builder" },
+];
+
 export const sql_orms: INTERACTIVE_PROMPTS[] = [
     { label: "Drizzle", emoji: "⚡", value: "drizzle" },
     { label: "TypeORM", emoji: "🏗️", value: "typeorm" },
     { label: "Sequelize", emoji: "🐚", value: "sequelize" },
+];
+
+export const sql_query_builders: INTERACTIVE_PROMPTS[] = [
     { label: "Kysely", emoji: "🧩", value: "kysely" },
 ];
 

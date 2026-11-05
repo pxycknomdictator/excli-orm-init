@@ -12,6 +12,7 @@ A CLI tool for setting up popular SQL and NoSQL ORMs/ODMs in Node.js projects, w
 - SQL: MySQL, MariaDB, PostgreSQL, SQLite
 - NoSQL: MongoDB
 - ORMs/ODMs: Sequelize, TypeORM, Drizzle, Mongoose, and the native MongoDB driver
+- Query builders: Kysely
 - TypeScript and JavaScript support
 - Works with npm, yarn, pnpm, and bun
 - Interactive or flag-based setup
@@ -29,7 +30,8 @@ A CLI tool for setting up popular SQL and NoSQL ORMs/ODMs in Node.js projects, w
 npx @excli/orm-init
 ```
 
-You'll be asked for your language, database, ORM/ODM, and package manager.
+You'll be asked for your language, database, database library category, ORM/ODM
+or query builder, and package manager.
 
 ### Flag mode
 
@@ -51,6 +53,7 @@ excli-orm-init
 | Language        | `--ts`, `--js`                                                           |
 | Database        | `--mysql`, `--mariadb`, `--postgres`, `--sqlite`, `--mongodb`            |
 | ORM/ODM         | `--sequelize`, `--typeorm`, `--drizzle`, `--mongoose`, `--native-driver` |
+| Query builder   | `--kysely`                                                              |
 | Package manager | `--npm`, `--yarn`, `--pnpm`, `--bun`                                     |
 
 ### Examples
@@ -86,6 +89,7 @@ npx @excli/orm-init --ts --pnpm --mongodb --native-driver
 | **Sequelize**     |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
 | **TypeORM**       |  ✅   |   ✅    |     ✅     |   ✅   |   ✅    |
 | **Drizzle**       |  ✅   |   ✅    |     ✅     |   ✅   |   ❌    |
+| **Kysely**       |  ✅   |   ✅   |     ✅     |   ✅   |   ❌    |
 | **Mongoose**      |  ❌   |   ❌    |     ❌     |   ❌   |   ✅    |
 | **Native driver** |  ❌   |   ❌    |     ❌     |   ❌   |   ✅    |
 

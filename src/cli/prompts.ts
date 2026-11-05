@@ -7,10 +7,16 @@ import {
     no_sql_orms,
     pkg_managers,
     sql_database,
+    sql_library_categories,
     sql_orms,
+    sql_query_builders,
     generateOptions,
 } from "../config";
-import type { DATABASE_TYPE, ProjectConfig } from "../types";
+import type {
+    DATABASE_LIBRARY_CATEGORY,
+    DATABASE_TYPE,
+    ProjectConfig,
+} from "../types";
 
 export async function promptDatabaseType(): Promise<
     ProjectConfig["databaseType"]
@@ -40,19 +46,39 @@ export async function promptDatabase(
     return database as ProjectConfig["database"];
 }
 
-export async function promptDatabaseOrm(
+export async function promptDatabaseLibrary(
     type: DATABASE_TYPE,
+    category: DATABASE_LIBRARY_CATEGORY,
 ): Promise<ProjectConfig["databaseOrm"]> {
-    const options = type === "sql" ? sql_orms : no_sql_orms;
+    const options =
+        type === "sql" && category === "query_builder"
+            ? sql_query_builders
+            : type === "sql"
+              ? sql_orms
+              : no_sql_orms;
 
     const orm = await select({
-        message: "Choose your ORM",
+        message:
+            category === "query_builder"
+                ? "Choose your query builder"
+                : "Choose your ORM / ODM",
         options: generateOptions(options),
     });
 
     if (isCancel(orm)) terminate("Process cancelled ❌");
 
     return orm as ProjectConfig["databaseOrm"];
+}
+
+export async function promptDatabaseLibraryCategory(): Promise<DATABASE_LIBRARY_CATEGORY> {
+    const category = await select({
+        message: "Select your database library category:",
+        options: generateOptions(sql_library_categories),
+    });
+
+    if (isCancel(category)) terminate("Process cancelled ❌");
+
+    return category as DATABASE_LIBRARY_CATEGORY;
 }
 
 export async function promptLanguage(): Promise<ProjectConfig["language"]> {

@@ -1,7 +1,8 @@
 import {
     promptDatabaseType,
     promptDatabase,
-    promptDatabaseOrm,
+    promptDatabaseLibraryCategory,
+    promptDatabaseLibrary,
     promptLanguage,
     promptPkgManager,
 } from "../cli";
@@ -19,7 +20,12 @@ export async function getInteractiveInputs(): Promise<ProjectConfig> {
 
     const databaseType = await promptDatabaseType();
     const database = await promptDatabase(databaseType);
-    const databaseOrm = await promptDatabaseOrm(databaseType);
+    const libraryCategory =
+        databaseType === "sql" ? await promptDatabaseLibraryCategory() : "orm";
+    const databaseOrm = await promptDatabaseLibrary(
+        databaseType,
+        libraryCategory,
+    );
     const language = await promptLanguage();
     const pkgManager = await promptPkgManager();
 
