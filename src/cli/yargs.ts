@@ -90,12 +90,24 @@ export function getYargsInputs(): ProjectConfig {
         .option("mongoose", {
             type: "boolean",
             description: "Use Mongoose (MongoDB only)",
-            conflicts: ["drizzle", "typeorm", "sequelize", "native-driver"],
+            conflicts: [
+                "drizzle",
+                "typeorm",
+                "sequelize",
+                "kysely",
+                "native-driver",
+            ],
         })
         .option("native-driver", {
             type: "boolean",
             description: "Use Native Node.js Drivers (MongoDB only)",
-            conflicts: ["drizzle", "typeorm", "sequelize", "mongoose"],
+            conflicts: [
+                "drizzle",
+                "typeorm",
+                "sequelize",
+                "kysely",
+                "mongoose",
+            ],
         })
         .option("npm", {
             type: "boolean",
@@ -216,7 +228,7 @@ export function getYargsInputs(): ProjectConfig {
     else if (argv.kysely) databaseOrm = "kysely";
     else if (argv.mongoose) databaseOrm = "mongoose";
     else if (argv["native-driver"]) databaseOrm = "native_driver";
-    else throw new Error("Invalid ORM/Driver");
+    else throw new Error("Invalid database library");
 
     let pkgManager: ProjectConfig["pkgManager"];
     if (argv.npm) pkgManager = "npm";
