@@ -77,7 +77,8 @@ export function getYargsInputs(): ProjectConfig {
         })
         .option("kysely", {
             type: "boolean",
-            description: "Use Kysely (MySQL, MariaDB, PostgreSQL, SQLite only)",
+            description:
+                "Use Kysely query builder (MySQL, MariaDB, PostgreSQL, SQLite only)",
             conflicts: [
                 "drizzle",
                 "typeorm",
@@ -140,7 +141,7 @@ export function getYargsInputs(): ProjectConfig {
                 !argv["native-driver"]
             )
                 throw new Error(
-                    "You must specify an ORM or Driver: --drizzle, --typeorm, --sequelize, --kysely, --mongoose, or --native-driver",
+                    "You must specify a database library: --drizzle, --typeorm, --sequelize, --kysely, --mongoose, or --native-driver",
                 );
 
             const isSql =
