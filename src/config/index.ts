@@ -127,9 +127,13 @@ export function getDrizzlePackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<"mysql" | "postgres" | "sqlite", PackageConfig> = {
+    const base: Record<SQL_DATABASE, PackageConfig> = {
         mysql: {
             packages: ["drizzle-orm", "mysql2"],
+            devPackages: ["drizzle-kit"],
+        },
+        mariadb: {
+            packages: ["drizzle-orm", "mariadb"],
             devPackages: ["drizzle-kit"],
         },
         postgres: {
@@ -142,13 +146,10 @@ export function getDrizzlePackages(
         },
     };
 
-    const normalizedDb =
-        db !== "mariadb" ? (db as "mysql" | "postgres" | "sqlite") : "mysql";
-    const config = base[normalizedDb];
+    const config = base[db as SQL_DATABASE];
 
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
-    if (normalizedDb === "postgres" && isTs)
-        config.devPackages.push("@types/pg");
+    if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
 
     return config;
 }
@@ -179,12 +180,13 @@ export function getTypeOrmPackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<
-        "mysql" | "postgres" | "mongodb" | "sqlite",
-        PackageConfig
-    > = {
+    const base: Record<ProjectConfig["database"], PackageConfig> = {
         mysql: {
             packages: ["typeorm", "mysql2", "reflect-metadata"],
+            devPackages: [],
+        },
+        mariadb: {
+            packages: ["typeorm", "mariadb", "reflect-metadata"],
             devPackages: [],
         },
         postgres: {
@@ -201,18 +203,14 @@ export function getTypeOrmPackages(
         },
     };
 
-    const normalizedDb =
-        db !== "mariadb"
-            ? (db as "mysql" | "sqlite" | "postgres" | "mongodb")
-            : "mysql";
-    const config = base[normalizedDb];
+    const config = base[db as ProjectConfig["database"]];
 
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
-    if (normalizedDb === "postgres" && isTs) {
+    if (db === "postgres" && isTs) {
         config.devPackages.push("@types/pg");
     }
 
-    if (normalizedDb === "sqlite" && isTs) {
+    if (db === "sqlite" && isTs) {
         config.devPackages.push("@types/better-sqlite3");
     }
 
@@ -253,21 +251,19 @@ export function getKyselyPackages(
     db: ProjectConfig["database"],
     isTs: boolean,
 ): PackageConfig {
-    const base: Record<
-        "mysql" | "postgres" | "sqlite" | "mariadb",
-        PackageConfig
-    > = {
+    const base: Record<SQL_DATABASE, PackageConfig> = {
         mysql: { packages: ["kysely", "mysql2"], devPackages: [] },
         postgres: { packages: ["kysely", "pg"], devPackages: [] },
         sqlite: { packages: ["kysely", "better-sqlite3"], devPackages: [] },
         mariadb: { packages: ["kysely", "mysql2"], devPackages: [] },
     };
 
-    const config = base[db as "mysql" | "postgres" | "sqlite" | "mariadb"];
+    const config = base[db as SQL_DATABASE];
     if (isTs) config.devPackages.push(...TypescriptDevPackages);
     if (db === "postgres" && isTs) config.devPackages.push("@types/pg");
-    if (db === "sqlite" && isTs)
+    if (db === "sqlite" && isTs) {
         config.devPackages.push("@types/better-sqlite3");
+    }
 
     return config;
 }
