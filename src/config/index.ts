@@ -186,7 +186,7 @@ export function getTypeOrmPackages(
             devPackages: [],
         },
         mariadb: {
-            packages: ["typeorm", "mariadb", "reflect-metadata"],
+            packages: ["typeorm", "mysql2", "reflect-metadata"],
             devPackages: [],
         },
         postgres: {
