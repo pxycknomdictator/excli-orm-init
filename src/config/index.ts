@@ -133,7 +133,7 @@ export function getDrizzlePackages(
             devPackages: ["drizzle-kit"],
         },
         mariadb: {
-            packages: ["drizzle-orm", "mariadb"],
+            packages: ["drizzle-orm", "mysql2"],
             devPackages: ["drizzle-kit"],
         },
         postgres: {
