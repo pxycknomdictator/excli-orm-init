@@ -34,36 +34,29 @@ function mongodbNativeConnection(language: ProjectConfig["language"]) {
 ${globalDeclaration}
 
 export async function client() {
-    if (globalForMongo.mongoClient) {
-        console.log("Reuse Database connection!");
-        return globalForMongo.mongoClient;
-    }
+    if (globalForMongo.mongoClient) return globalForMongo.mongoClient;
     if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
 
-    try {
-        const isNewConnection = !globalForMongo.mongoClientPromise;
-        if (!globalForMongo.mongoClientPromise) {
-            globalForMongo.mongoClientPromise = new MongoClient(
-                process.env.DATABASE_URL,
-            ).connect();
-        }
+    if (!globalForMongo.mongoClientPromise) {
+        globalForMongo.mongoClientPromise = new MongoClient(
+            process.env.DATABASE_URL,
+        ).connect();
+    }
 
-        globalForMongo.mongoClient =
-            await globalForMongo.mongoClientPromise;
-        if (isNewConnection) console.log("Database is connected!");
-        else console.log("Reuse Database connection!");
+    try {
+        globalForMongo.mongoClient = await globalForMongo.mongoClientPromise;
+        console.log("Database is connected!");
         return globalForMongo.mongoClient;
     } catch (error) {
         globalForMongo.mongoClientPromise = undefined;
+        globalForMongo.mongoClient = undefined;
+        globalForMongo.mongoDb = undefined;
         throw new Error("failed to connect with database", { cause: error });
     }
 }
 
 export async function database() {
-    if (globalForMongo.mongoDb) {
-        console.log("Reuse Database connection!");
-        return globalForMongo.mongoDb;
-    }
+    if (globalForMongo.mongoDb) return globalForMongo.mongoDb;
 
     try {
         const mongoClient = await client();
